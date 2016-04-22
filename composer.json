@@ -1,0 +1,15 @@
+{
+	"name": "spaze/csp-config",
+	"description": "Build Content Security Policy from a config file",
+	"license": "MIT",
+	"authors": [
+		{
+			"name": "Michal Špaček",
+			"homepage": "https://www.michalspacek.cz",
+			"email": "mail@michalspacek.cz"
+		}
+	],
+	"autoload": {
+		"psr-4": {"Spaze\\CspConfig\\": "src"}
+	}
+}
