@@ -10,6 +10,6 @@
 		}
 	],
 	"autoload": {
-		"psr-4": {"Spaze\\CspConfig\\": "src"}
+		"psr-4": {"Spaze\\ContentSecurityPolicy\\": "src"}
 	}
 }

@@ -1,12 +1,12 @@
 <?php
-namespace Spaze\CspConfig;
+namespace Spaze\ContentSecurityPolicy;
 
 /**
- * ContentSecurityPolicy service.
+ * ContentSecurityPolicy\Config service.
  *
  * @author Michal Špaček
  */
-class ContentSecurityPolicy
+class Config
 {
 
 	/** @var string */
