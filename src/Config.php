@@ -39,10 +39,11 @@ class Config
 	public function getHeader($presenter, $action)
 	{
 		$policy = array();
-		foreach ($this->policy[$this->findConfigKey($presenter, $action)] as $directive => $sources) {
+		$key = $this->findConfigKey($presenter, $action);
+		foreach ($this->policy[$key] as $directive => $sources) {
 			if (is_int($directive)) {
-				foreach ($sources as $key => $value) {
-					$policy[$key] = trim("$key " . $this->flattenSources($value));
+				foreach ($sources as $name => $value) {
+					$policy[$name] = trim("$name " . $this->flattenSources($value));
 				}
 			} else {
 				$policy[$directive] = trim("$directive " . $this->flattenSources($sources));
