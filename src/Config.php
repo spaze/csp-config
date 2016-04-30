@@ -15,6 +15,12 @@ class Config
 	/** @var array of key => array of policies */
 	protected $policy = array();
 
+	/** @var array of name => array of policies */
+	protected $snippets = array();
+
+	/** @var array of snippet names */
+	protected $currentSnippets = array();
+
 
 	/**
 	 * Set policy.
@@ -30,6 +36,17 @@ class Config
 
 
 	/**
+	 * Set policy snippets.
+	 *
+	 * @param array (key => array of policies)
+	 */
+	public function setSnippets(array $snippets)
+	{
+		$this->snippets = $snippets;
+	}
+
+
+	/**
 	 * Get Content-Security-Policy header value.
 	 *
 	 * @param  string $presenter
@@ -39,8 +56,15 @@ class Config
 	public function getHeader($presenter, $action)
 	{
 		$policy = array();
-		$key = $this->findConfigKey($presenter, $action);
-		foreach ($this->policy[$key] as $directive => $sources) {
+		$currentPolicy = $this->policy[$this->findConfigKey($presenter, $action)];
+
+		foreach ($this->currentSnippets as $snippetName) {
+			foreach ($this->snippets[$snippetName] as $directive => $sources) {
+				$currentPolicy[$directive][] = $sources;
+			}
+		}
+
+		foreach ($currentPolicy as $directive => $sources) {
 			if (is_int($directive)) {
 				foreach ($sources as $name => $value) {
 					$policy[$name] = trim("$name " . $this->flattenSources($value));
@@ -50,6 +74,17 @@ class Config
 			}
 		}
 		return implode('; ', $policy);
+	}
+
+
+	/**
+	 * Add named snippet to current CSP config.
+	 *
+	 * @param string $snippetName
+	 */
+	public function addSnippet($snippetName)
+	{
+		$this->currentSnippets[] = $snippetName;
 	}
 
 
