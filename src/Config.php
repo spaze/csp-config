@@ -9,8 +9,8 @@ namespace Spaze\ContentSecurityPolicy;
 class Config
 {
 
-	/** @var string */
-	const DEFAULT_PART = 'DEFAULT';
+	/** @internal configuration key for default values */
+	const DEFAULT_KEY = 'DEFAULT';
 
 	/** @var array of key => array of policies */
 	protected $policy = array();
@@ -86,9 +86,20 @@ class Config
 			if (isset($this->policy[implode('_', $parts)])) {
 				break;
 			}
-			$parts[$i] = self::DEFAULT_PART;
+			$parts[$i] = self::DEFAULT_KEY;
 		}
 		return implode('_', $parts);
+	}
+
+
+	/**
+	 * Get default config key.
+	 *
+	 * @return string
+	 */
+	public function getDefaultKey()
+	{
+		return self::DEFAULT_KEY;
 	}
 
 }
