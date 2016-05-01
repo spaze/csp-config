@@ -21,6 +21,12 @@ class Config
 	/** @var array of snippet names */
 	protected $currentSnippets = array();
 
+	/** @var boolean */
+	protected $supportLegacyBrowsers = false;
+
+	/** @var array */
+	protected $directives = array();
+
 
 	/**
 	 * Set policy.
@@ -55,7 +61,7 @@ class Config
 	 */
 	public function getHeader($presenter, $action)
 	{
-		$policy = array();
+		$this->directives = array();
 		$currentPolicy = $this->policy[$this->findConfigKey($presenter, $action)];
 
 		foreach ($this->currentSnippets as $snippetName) {
@@ -67,13 +73,13 @@ class Config
 		foreach ($currentPolicy as $directive => $sources) {
 			if (is_int($directive)) {
 				foreach ($sources as $name => $value) {
-					$policy[$name] = trim("$name " . $this->flattenSources($value));
+					$this->addDirective($name, $value);
 				}
 			} else {
-				$policy[$directive] = trim("$directive " . $this->flattenSources($sources));
+				$this->addDirective($directive, $sources);
 			}
 		}
-		return implode('; ', $policy);
+		return implode('; ', $this->directives);
 	}
 
 
@@ -129,6 +135,22 @@ class Config
 
 
 	/**
+	 * Format and add a directive.
+	 *
+	 * @param string $name
+	 * @param string|array $value
+	 */
+	private function addDirective($name, $value)
+	{
+		$values = $this->flattenSources($value);
+		$this->directives[$name] = trim("$name $values");
+		if ($name === 'child-src' && $this->supportLegacyBrowsers) {
+			$this->directives['frame-src'] = trim("frame-src $values");
+		}
+	}
+
+
+	/**
 	 * Get default config key.
 	 *
 	 * @return string
@@ -136,6 +158,18 @@ class Config
 	public function getDefaultKey()
 	{
 		return self::DEFAULT_KEY;
+	}
+
+
+	/**
+	 * Enable legacy browser (i.e. Safari) support
+	 *
+	 * @return self
+	 */
+	public function supportLegacyBrowsers()
+	{
+		$this->supportLegacyBrowsers = true;
+		return $this;
 	}
 
 }
