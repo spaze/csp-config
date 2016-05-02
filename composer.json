@@ -9,6 +9,9 @@
 			"email": "mail@michalspacek.cz"
 		}
 	],
+	"require": {
+		"nette/di": "~2.3"
+	},
 	"autoload": {
 		"psr-4": {"Spaze\\ContentSecurityPolicy\\": "src"}
 	}

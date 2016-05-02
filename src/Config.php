@@ -1,6 +1,8 @@
 <?php
 namespace Spaze\ContentSecurityPolicy;
 
+use Nette\DI\Config\Helpers;
+
 /**
  * ContentSecurityPolicy\Config service.
  *
@@ -62,22 +64,22 @@ class Config
 	public function getHeader($presenter, $action)
 	{
 		$this->directives = array();
-		$currentPolicy = $this->policy[$this->findConfigKey($presenter, $action)];
 
+		$configKey = $this->findConfigKey($presenter, $action);
+		if (isset($this->policy[$configKey][Helpers::EXTENDS_KEY])) {
+			$currentPolicy = Helpers::merge($this->policy[$configKey], $this->policy[$this->policy[$configKey][Helpers::EXTENDS_KEY]]);
+			unset($currentPolicy[Helpers::EXTENDS_KEY]);
+		} else {
+			$currentPolicy = $this->policy[$configKey];
+		}
 		foreach ($this->currentSnippets as $snippetName) {
 			foreach ($this->snippets[$snippetName] as $directive => $sources) {
-				$currentPolicy[$directive][] = $sources;
+				$currentPolicy[$directive] = (isset($currentPolicy[$directive]) ? array_merge($currentPolicy[$directive], $sources) : $sources);
 			}
 		}
 
 		foreach ($currentPolicy as $directive => $sources) {
-			if (is_int($directive)) {
-				foreach ($sources as $name => $value) {
-					$this->addDirective($name, $value);
-				}
-			} else {
-				$this->addDirective($directive, $sources);
-			}
+			$this->addDirective($directive, $sources);
 		}
 		return implode('; ', $this->directives);
 	}
@@ -95,26 +97,7 @@ class Config
 
 
 	/**
-	 * Make string from (possible) arrays.
-	 *
-	 * @param  string|array $sources
-	 * @return string
-	 */
-	private function flattenSources($sources)
-	{
-		if (is_array($sources)) {
-			$items = [];
-			array_walk_recursive($sources, function($value) use (&$items) {
-				$items[] = $value;
-			});
-			$sources = implode(' ', $items);
-		}
-		return $sources;
-	}
-
-
-	/**
-	 * Find CPS policy config key.
+	 * Find CSP policy config key.
 	 *
 	 * @param  string $presenter
 	 * @param  string $action
@@ -138,11 +121,11 @@ class Config
 	 * Format and add a directive.
 	 *
 	 * @param string $name
-	 * @param string|array $value
+	 * @param string|array $sources
 	 */
-	private function addDirective($name, $value)
+	private function addDirective($name, $sources)
 	{
-		$values = $this->flattenSources($value);
+		$values = (is_array($sources) ? implode(' ', $sources) : $sources);
 		$this->directives[$name] = trim("$name $values");
 		if ($name === 'child-src' && $this->supportLegacyBrowsers) {
 			$this->directives['frame-src'] = trim("frame-src $values");
