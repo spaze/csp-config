@@ -34,12 +34,14 @@ class Config
 	 * Set policy.
 	 *
 	 * @param array (key => array of policies)
+	 * @return self
 	 */
 	public function setPolicy(array $policy)
 	{
 		foreach ($policy as $key => $sources) {
 			$this->policy[$key] = $sources;
 		}
+		return $this;
 	}
 
 
@@ -47,10 +49,12 @@ class Config
 	 * Set policy snippets.
 	 *
 	 * @param array (key => array of policies)
+	 * @return self
 	 */
 	public function setSnippets(array $snippets)
 	{
 		$this->snippets = $snippets;
+		return $this;
 	}
 
 
@@ -89,10 +93,12 @@ class Config
 	 * Add named snippet to current CSP config.
 	 *
 	 * @param string $snippetName
+	 * @return self
 	 */
 	public function addSnippet($snippetName)
 	{
 		$this->currentSnippets[] = $snippetName;
+		return $this;
 	}
 
 
