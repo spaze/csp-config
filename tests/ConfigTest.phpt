@@ -62,6 +62,54 @@ class ConfigTest extends Tester\TestCase
 	}
 
 
+	public function testGetHeaderDefaultUppercase()
+	{
+		$config = new Config();
+		$config->setPolicy([
+			'foo_DEFAULT' => [
+				'default-src' => "'none'",
+				'img-src' => 'https://example.com',
+			],
+			'foo_default' => [
+				'default-src' => "'none'",
+				'img-src' => 'https://default.example.com',
+			],
+		]);
+		Assert::same("default-src 'none'; img-src https://example.com", $config->getHeader('Foo', 'bar'));
+		Assert::same("default-src 'none'; img-src https://default.example.com", $config->getHeader('Foo', 'default'));
+	}
+
+
+	public function testGetHeaderModule()
+	{
+		$config = new Config();
+		$config->setPolicy([
+			'foo_foo_bar' => [
+				'default-src' => "'none'",
+				'img-src' => 'https://foobar.example.com',
+			]
+		]);
+		Assert::same("default-src 'none'; img-src https://foobar.example.com", $config->getHeader('Foo:Foo', 'bar'));
+	}
+
+
+	public function testGetHeaderDefaultModule()
+	{
+		$config = new Config();
+		$config->setPolicy([
+			'DEFAULT_DEFAULT_DEFAULT' => [
+				'default-src' => "'none'",
+				'img-src' => 'https://default.example.com',
+			],
+			'DEFAULT_foo_bar' => [
+				'default-src' => "'none'",
+				'img-src' => 'https://foobar.example.com',
+			],
+		]);
+		Assert::same("default-src 'none'; img-src https://default.example.com", $config->getHeader('Waldo:Foo', 'bar'));
+	}
+
+
 	public function testGetHeaderLegacyBrowser()
 	{
 		$config = new Config();
