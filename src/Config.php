@@ -78,7 +78,7 @@ class Config
 		}
 		foreach ($this->currentSnippets as $snippetName) {
 			foreach ($this->snippets[$snippetName] as $directive => $sources) {
-				$currentPolicy[$directive] = (isset($currentPolicy[$directive]) ? array_merge($currentPolicy[$directive], $sources) : $sources);
+				$currentPolicy[$directive] = (isset($currentPolicy[$directive]) ? array_merge((array)$currentPolicy[$directive], $sources) : $sources);
 			}
 		}
 

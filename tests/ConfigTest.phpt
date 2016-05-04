@@ -124,6 +124,25 @@ class ConfigTest extends Tester\TestCase
 		Assert::same("default-src 'none'; child-src https://example.com; frame-src https://example.com", $config->getHeader('Foo', 'bar'));
 	}
 
+
+	public function testGetHeaderDefaultActionWithSnippets()
+	{
+		$config = new Config();
+		$config->setPolicy([
+			'foo_DEFAULT' => [
+				'default-src' => "'none'",
+				'img-src' => 'https://foo.example.com',
+			]
+		]);
+		$config->setSnippets([
+			'ga' => [
+				'img-src' => ['https://www.google-analytics.com'],
+				'script-src' => ['https://www.google-analytics.com'],
+			]
+		]);
+		Assert::same("default-src 'none'; img-src https://foo.example.com https://www.google-analytics.com; script-src https://www.google-analytics.com", $config->addSnippet('ga')->getHeader('Foo', 'bar'));
+	}
+
 }
 
 $testCase = new ConfigTest();
