@@ -143,6 +143,24 @@ class ConfigTest extends Tester\TestCase
 		Assert::same("default-src 'none'; img-src https://foo.example.com https://www.google-analytics.com; script-src https://www.google-analytics.com", $config->addSnippet('ga')->getHeader('Foo', 'bar'));
 	}
 
+
+	public function testGetHeaderInheritance()
+	{
+		$config = new Config();
+		$config->setPolicy($f=[
+			'DEFAULT_DEFAULT' => [
+				'default-src' => ["'self'"],
+				'img-src' => ['https://default.example.com'],
+			],
+			'foo_bar' => [
+				\Nette\DI\Config\Helpers::EXTENDS_KEY => 'DEFAULT_DEFAULT',
+				'default-src' => ['https://extends.example.com'],
+				'img-src' => ['https://extends.example.com'],
+			],
+		]);
+		Assert::same("default-src 'self' https://extends.example.com; img-src https://default.example.com https://extends.example.com", $config->getHeader('Foo', 'bar'));
+	}
+
 }
 
 $testCase = new ConfigTest();
