@@ -14,5 +14,8 @@
 	},
 	"autoload": {
 		"psr-4": {"Spaze\\ContentSecurityPolicy\\": "src"}
+	},
+	"require-dev": {
+		"nette/tester": "^1.7"
 	}
 }
