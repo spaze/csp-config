@@ -16,6 +16,7 @@
 		"psr-4": {"Spaze\\ContentSecurityPolicy\\": "src"}
 	},
 	"require-dev": {
-		"nette/tester": "^1.7"
+		"nette/tester": "^1.7",
+		"nette/bootstrap": "^2.3"
 	}
 }
