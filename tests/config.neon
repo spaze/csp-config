@@ -8,7 +8,7 @@ contentSecurityPolicy:
 			img-src:
 				- https://www.google-analytics.com
 	policies:
-		DEFAULT_DEFAULT:
+		*.*:
 			child-src:
 				- foo
 				- bar

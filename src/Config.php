@@ -12,7 +12,10 @@ class Config
 {
 
 	/** @internal configuration key for default values */
-	const DEFAULT_KEY = 'DEFAULT';
+	const DEFAULT_KEY = '*';
+
+	/** @internal configuration key separator */
+	const KEY_SEPARATOR = '.';
 
 	/** @var array of key => array of policies */
 	protected $policy = array();
@@ -114,12 +117,12 @@ class Config
 		$parts = explode(':', strtolower($presenter));
 		$parts[] = strtolower($action);
 		for ($i = count($parts) - 1; $i >= 0; $i--) {
-			if (isset($this->policy[implode('_', $parts)])) {
+			if (isset($this->policy[implode(self::KEY_SEPARATOR, $parts)])) {
 				break;
 			}
 			$parts[$i] = self::DEFAULT_KEY;
 		}
-		return implode('_', $parts);
+		return implode(self::KEY_SEPARATOR, $parts);
 	}
 
 

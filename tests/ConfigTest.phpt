@@ -27,7 +27,7 @@ class ConfigTest extends Tester\TestCase
 	{
 		$config = new Config();
 		$config->setPolicy([
-			'DEFAULT_DEFAULT' => [
+			'*.*' => [
 				'default-src' => "'none'",
 				'img-src' => 'https://example.com',
 			]
@@ -40,7 +40,7 @@ class ConfigTest extends Tester\TestCase
 	{
 		$config = new Config();
 		$config->setPolicy([
-			'foo_DEFAULT' => [
+			'foo.*' => [
 				'default-src' => "'none'",
 				'img-src' => 'https://foo.example.com',
 			]
@@ -53,7 +53,7 @@ class ConfigTest extends Tester\TestCase
 	{
 		$config = new Config();
 		$config->setPolicy([
-			'foo_bar' => [
+			'foo.bar' => [
 				'default-src' => "'none'",
 				'img-src' => 'https://foobar.example.com',
 			]
@@ -62,29 +62,11 @@ class ConfigTest extends Tester\TestCase
 	}
 
 
-	public function testGetHeaderDefaultUppercase()
-	{
-		$config = new Config();
-		$config->setPolicy([
-			'foo_DEFAULT' => [
-				'default-src' => "'none'",
-				'img-src' => 'https://example.com',
-			],
-			'foo_default' => [
-				'default-src' => "'none'",
-				'img-src' => 'https://default.example.com',
-			],
-		]);
-		Assert::same("default-src 'none'; img-src https://example.com", $config->getHeader('Foo', 'bar'));
-		Assert::same("default-src 'none'; img-src https://default.example.com", $config->getHeader('Foo', 'default'));
-	}
-
-
 	public function testGetHeaderModule()
 	{
 		$config = new Config();
 		$config->setPolicy([
-			'foo_foo_bar' => [
+			'foo.foo.bar' => [
 				'default-src' => "'none'",
 				'img-src' => 'https://foobar.example.com',
 			]
@@ -97,11 +79,11 @@ class ConfigTest extends Tester\TestCase
 	{
 		$config = new Config();
 		$config->setPolicy([
-			'DEFAULT_DEFAULT_DEFAULT' => [
+			'*.*.*' => [
 				'default-src' => "'none'",
 				'img-src' => 'https://default.example.com',
 			],
-			'DEFAULT_foo_bar' => [
+			'foo.bar' => [
 				'default-src' => "'none'",
 				'img-src' => 'https://foobar.example.com',
 			],
@@ -114,7 +96,7 @@ class ConfigTest extends Tester\TestCase
 	{
 		$config = new Config();
 		$config->setPolicy([
-			'foo_bar' => [
+			'foo.bar' => [
 				'default-src' => "'none'",
 				'child-src' => 'https://example.com',
 			]
@@ -129,7 +111,7 @@ class ConfigTest extends Tester\TestCase
 	{
 		$config = new Config();
 		$config->setPolicy([
-			'foo_DEFAULT' => [
+			'foo.*' => [
 				'default-src' => "'none'",
 				'img-src' => 'https://foo.example.com',
 			]
@@ -148,12 +130,12 @@ class ConfigTest extends Tester\TestCase
 	{
 		$config = new Config();
 		$config->setPolicy($f=[
-			'DEFAULT_DEFAULT' => [
+			'*.*' => [
 				'default-src' => ["'self'"],
 				'img-src' => ['https://default.example.com'],
 			],
-			'foo_bar' => [
-				\Nette\DI\Config\Helpers::EXTENDS_KEY => 'DEFAULT_DEFAULT',
+			'foo.bar' => [
+				\Nette\DI\Config\Helpers::EXTENDS_KEY => '*.*',
 				'default-src' => ['https://extends.example.com'],
 				'img-src' => ['https://extends.example.com'],
 			],
