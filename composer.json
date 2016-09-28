@@ -17,9 +17,11 @@
 	},
 	"require-dev": {
 		"nette/tester": "^1.7",
-		"nette/bootstrap": "^2.3"
+		"nette/bootstrap": "^2.3",
+		"paragonie/random_compat": "^2.0"
 	},
 	"suggest": {
+		"paragonie/random_compat": "PHP 5.x polyfill for random_bytes() used by this library",
 		"spaze/sri-macros": "For script tags with automatically added Content Security Policy nonces, and Subresource Integrity hashes, too."
 	}
 }
