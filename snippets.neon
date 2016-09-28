@@ -1,0 +1,22 @@
+ga:
+	img-src:
+		- https://www.google-analytics.com
+	script-src:
+		- https://www.google-analytics.com
+slideshare:
+	child-src:
+		- https://www.slideshare.net
+speakerdeck:
+	script-src:
+		- https://speakerdeck.com
+	child-src:
+		- https://speakerdeck.com
+youtube:
+	child-src:
+		- https://www.youtube-nocookie.com
+vimeo:
+	child-src:
+		- https://player.vimeo.com
+slideslive:
+	child-src:
+		- https://slideslive.com
