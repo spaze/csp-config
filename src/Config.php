@@ -23,6 +23,12 @@ class Config
 	/** @var array of name => array of policies */
 	protected $snippets = array();
 
+	/** @var array of directive => add? */
+	protected $addNonce = array();
+
+	/** @var array of directive => add? */
+	protected $addStrictDynamic = array();
+
 	/** @var array of snippet names */
 	protected $currentSnippets = array();
 
@@ -31,6 +37,9 @@ class Config
 
 	/** @var array */
 	protected $directives = array();
+
+	/** @var string */
+	protected $nonce;
 
 
 	/**
@@ -62,6 +71,32 @@ class Config
 
 
 	/**
+	 * Set directives to which add nonce.
+	 *
+	 * @param array of directive => add?
+	 * @return self
+	 */
+	public function setAddNonce(array $addNonce)
+	{
+		$this->addNonce = $addNonce;
+		return $this;
+	}
+
+
+	/**
+	 * Set directives to which add 'strict-dynamic'.
+	 *
+	 * @param array of directive => add?
+	 * @return self
+	 */
+	public function setAddStrictDynamic(array $addStrictDynamic)
+	{
+		$this->addStrictDynamic = $addStrictDynamic;
+		return $this;
+	}
+
+
+	/**
 	 * Get Content-Security-Policy header value.
 	 *
 	 * @param  string $presenter
@@ -86,7 +121,7 @@ class Config
 		}
 
 		foreach ($currentPolicy as $directive => $sources) {
-			$this->addDirective($directive, $sources);
+			$this->addDirective($directive, (array)$sources);
 		}
 		return implode('; ', $this->directives);
 	}
@@ -130,15 +165,33 @@ class Config
 	 * Format and add a directive.
 	 *
 	 * @param string $name
-	 * @param string|array $sources
+	 * @param array $sources
 	 */
-	private function addDirective($name, $sources)
+	private function addDirective($name, array $sources)
 	{
-		$values = (is_array($sources) ? implode(' ', $sources) : $sources);
+		$values = (isset($this->addNonce[$name]) && $this->addNonce[$name] ? "'nonce-" . $this->getNonce() . "' " : '');
+		$values .= (isset($this->addStrictDynamic[$name]) && $this->addStrictDynamic[$name]	? "'strict-dynamic' " : '');
+		foreach ($sources as &$source) {
+			$values .= $source . ' ';
+		}
 		$this->directives[$name] = trim("$name $values");
 		if ($name === 'child-src' && $this->supportLegacyBrowsers) {
 			$this->directives['frame-src'] = trim("frame-src $values");
 		}
+	}
+
+
+	/**
+	 * Get nonce.
+	 *
+	 * @return string
+	 */
+	public function getNonce()
+	{
+		if ($this->nonce === null) {
+			$this->nonce = base64_encode(random_bytes(16));
+		}
+		return $this->nonce;
 	}
 
 

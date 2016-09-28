@@ -27,6 +27,12 @@ class ConfigExtension extends \Nette\DI\CompilerExtension
 			->addSetup('setPolicy', array($config['policies']))
 			->addSetup('setSnippets', array($config['snippets']));
 
+		if ($config['addNonce']) {
+			$cspConfig->addSetup('setAddNonce', array($config['addNonce']));
+		}
+		if ($config['addStrictDynamic']) {
+			$cspConfig->addSetup('setAddStrictDynamic', array($config['addStrictDynamic']));
+		}
 		if ($config['supportLegacyBrowsers']) {
 			$cspConfig->addSetup('supportLegacyBrowsers');
 		}

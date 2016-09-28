@@ -18,5 +18,8 @@
 	"require-dev": {
 		"nette/tester": "^1.7",
 		"nette/bootstrap": "^2.3"
+	},
+	"suggest": {
+		"spaze/sri-macros": "For script tags with automatically added Content Security Policy nonces, and Subresource Integrity hashes, too."
 	}
 }

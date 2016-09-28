@@ -3,6 +3,12 @@ extensions:
 
 contentSecurityPolicy:
 	supportLegacyBrowsers: true
+	addNonce:
+		script-src: yes
+		style-src: no
+	addStrictDynamic:
+		script-src: yes
+		style-src: no
 	snippets:
 		ga:
 			img-src:
@@ -10,5 +16,11 @@ contentSecurityPolicy:
 	policies:
 		*.*:
 			child-src:
+				- foo
+				- bar
+			style-src:
+				- foo
+				- bar
+			script-src:
 				- foo
 				- bar

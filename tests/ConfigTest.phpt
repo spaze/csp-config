@@ -143,6 +143,27 @@ class ConfigTest extends Tester\TestCase
 		Assert::same("default-src 'self' https://extends.example.com; img-src https://default.example.com https://extends.example.com", $config->getHeader('Foo', 'bar'));
 	}
 
+
+	public function testGetHeaderWithNonceStrictDynamic()
+	{
+		$config = new Config();
+		$config->setPolicy([
+			'foo.bar' => [
+				'script-src' => "'self'",
+				'style-src' => 'https://foobar.example.com',
+			]
+		]);
+		$config->setAddNonce([
+			'script-src' => true,
+			'style-src' => false,
+		]);
+		$config->setAddStrictDynamic([
+			'script-src' => true,
+			'style-src' => true,
+		]);
+		Assert::match("#script\-src 'nonce\-[a-zA-Z0-9+/\-_]+={0,2}' 'strict\-dynamic' 'self'; style\-src 'strict\-dynamic' https://foobar.example.com#", $config->getHeader('Foo', 'bar'));
+	}
+
 }
 
 $testCase = new ConfigTest();
