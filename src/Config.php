@@ -180,8 +180,9 @@ class Config
 	 */
 	private function addDirective($name, array $sources)
 	{
-		$values = (isset($this->addNonce[$name]) && $this->addNonce[$name] ? "'nonce-" . $this->nonceGenerator->getNonce() . "' " : '');
-		$values .= (isset($this->addStrictDynamic[$name]) && $this->addStrictDynamic[$name]	? "'strict-dynamic' " : '');
+		$nonceable = (isset($this->addNonce[$name], $this->nonceGenerator) && $this->addNonce[$name] && $this->nonceGenerator instanceof \Spaze\NonceGenerator\GeneratorInterface);
+		$values = ($nonceable ? "'nonce-" . $this->nonceGenerator->getNonce() . "' " : '');
+		$values .= (isset($this->addStrictDynamic[$name]) && $this->addStrictDynamic[$name] && $nonceable ? "'strict-dynamic' " : '');
 		foreach ($sources as &$source) {
 			$values .= $source . ' ';
 		}

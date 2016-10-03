@@ -162,7 +162,7 @@ class ConfigTest extends Tester\TestCase
 			'script-src' => true,
 			'style-src' => true,
 		]);
-		Assert::same("script-src 'nonce-" . base64_encode($random) . "' 'strict-dynamic' 'self'; style-src 'strict-dynamic' https://foobar.example.com", $config->getHeader('Foo', 'bar'));
+		Assert::same("script-src 'nonce-" . base64_encode($random) . "' 'strict-dynamic' 'self'; style-src https://foobar.example.com", $config->getHeader('Foo', 'bar'));
 	}
 
 }
