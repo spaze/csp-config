@@ -8,7 +8,7 @@ use Nette\DI\Config\Helpers;
  *
  * @author Michal Špaček
  */
-class Config implements NonceGeneratorInterface
+class Config
 {
 
 	/** @internal configuration key for default values */
@@ -16,6 +16,9 @@ class Config implements NonceGeneratorInterface
 
 	/** @internal configuration key separator */
 	const KEY_SEPARATOR = '.';
+
+	/** @var \Spaze\NonceGenerator\Generator|null */
+	protected $nonceGenerator;
 
 	/** @var array of key => array of policies */
 	protected $policy = array();
@@ -38,8 +41,16 @@ class Config implements NonceGeneratorInterface
 	/** @var array */
 	protected $directives = array();
 
-	/** @var string */
-	protected $nonce;
+
+	/**
+	 * Constructor.
+	 *
+	 * @param \Spaze\NonceGenerator\Generator $generator
+	 */
+	public function __construct(\Spaze\NonceGenerator\GeneratorInterface $generator = null)
+	{
+		$this->nonceGenerator = $generator;
+	}
 
 
 	/**
@@ -169,7 +180,7 @@ class Config implements NonceGeneratorInterface
 	 */
 	private function addDirective($name, array $sources)
 	{
-		$values = (isset($this->addNonce[$name]) && $this->addNonce[$name] ? "'nonce-" . $this->getNonce() . "' " : '');
+		$values = (isset($this->addNonce[$name]) && $this->addNonce[$name] ? "'nonce-" . $this->nonceGenerator->getNonce() . "' " : '');
 		$values .= (isset($this->addStrictDynamic[$name]) && $this->addStrictDynamic[$name]	? "'strict-dynamic' " : '');
 		foreach ($sources as &$source) {
 			$values .= $source . ' ';
@@ -178,20 +189,6 @@ class Config implements NonceGeneratorInterface
 		if ($name === 'child-src' && $this->supportLegacyBrowsers) {
 			$this->directives['frame-src'] = trim("frame-src $values");
 		}
-	}
-
-
-	/**
-	 * Get nonce.
-	 *
-	 * @return string
-	 */
-	public function getNonce()
-	{
-		if ($this->nonce === null) {
-			$this->nonce = base64_encode(random_bytes(16));
-		}
-		return $this->nonce;
 	}
 
 

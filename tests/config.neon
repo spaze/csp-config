@@ -3,9 +3,6 @@ extensions:
 
 contentSecurityPolicy:
 	supportLegacyBrowsers: true
-	addNonce:
-		script-src: yes
-		style-src: no
 	addStrictDynamic:
 		script-src: yes
 		style-src: no

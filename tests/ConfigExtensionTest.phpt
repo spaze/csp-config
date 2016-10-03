@@ -45,7 +45,7 @@ class ConfigExtensionTest extends Tester\TestCase
 		Assert::type(CspConfig::class, $config);
 
 		$config->addSnippet('ga');
-		Assert::match("#child\-src foo bar; frame\-src foo bar; style\-src foo bar; script\-src 'nonce\-[a-zA-Z0-9+/\-_]+={0,2}' 'strict\-dynamic' foo bar; img\-src https://www.google\-analytics.com#", $config->getHeader('Foo', 'bar'));
+		Assert::same("child-src foo bar; frame-src foo bar; style-src foo bar; script-src 'strict-dynamic' foo bar; img-src https://www.google-analytics.com", $config->getHeader('Foo', 'bar'));
 	}
 
 }
