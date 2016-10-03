@@ -13,6 +13,8 @@ class ConfigExtension extends \Nette\DI\CompilerExtension
 	public $defaults = array(
 		'snippets' => array(),
 		'policies' => array(),
+		'addNonce' => ['script-src' => true],
+		'addStrictDynamic' => ['script-src' => true],
 		'supportLegacyBrowsers' => false,
 	);
 
