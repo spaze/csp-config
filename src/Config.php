@@ -8,7 +8,7 @@ use Nette\DI\Config\Helpers;
  *
  * @author Michal Špaček
  */
-class Config
+class Config implements NonceGeneratorInterface
 {
 
 	/** @internal configuration key for default values */
