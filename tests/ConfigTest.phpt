@@ -144,6 +144,28 @@ class ConfigTest extends Tester\TestCase
 	}
 
 
+	public function testGetHeaderDeepInheritance()
+	{
+		$config = new Config();
+		$config->setPolicy($f=[
+			'*.*' => [
+				'default-src' => ["'self'"],
+				'img-src' => ['https://default.example.com'],
+			],
+			'foo.bar' => [
+				\Nette\DI\Config\Helpers::EXTENDS_KEY => '*.*',
+				'default-src' => ['https://extends.example.com'],
+				'img-src' => ['https://extends.example.com'],
+			],
+			'bar.baz' => [
+				\Nette\DI\Config\Helpers::EXTENDS_KEY => 'foo.bar',
+				'connect-src' => ['https://extends.example.com'],
+			],
+		]);
+		Assert::same("default-src 'self' https://extends.example.com; img-src https://default.example.com https://extends.example.com; connect-src https://extends.example.com", $config->getHeader('Bar', 'baz'));
+	}
+
+
 	public function testGetHeaderWithNonceStrictDynamic()
 	{
 		$random = 'https://xkcd.com/221/';

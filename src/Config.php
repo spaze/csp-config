@@ -120,8 +120,7 @@ class Config
 
 		$configKey = $this->findConfigKey($presenter, $action);
 		if (isset($this->policy[$configKey][Helpers::EXTENDS_KEY])) {
-			$currentPolicy = Helpers::merge($this->policy[$configKey], $this->policy[$this->policy[$configKey][Helpers::EXTENDS_KEY]]);
-			unset($currentPolicy[Helpers::EXTENDS_KEY]);
+			$currentPolicy = $this->mergeExtends($this->policy[$configKey], $this->policy[$configKey][Helpers::EXTENDS_KEY]);
 		} else {
 			$currentPolicy = $this->policy[$configKey];
 		}
@@ -135,6 +134,24 @@ class Config
 			$this->addDirective($directive, (array)$sources);
 		}
 		return implode('; ', $this->directives);
+	}
+
+
+	/**
+	 * Merge parent policies.
+	 *
+	 * @param array $currentPolicy
+	 * @param string $parentKey
+	 * @return array
+	 */
+	private function mergeExtends(array $currentPolicy, $parentKey)
+	{
+		$currentPolicy = Helpers::merge($currentPolicy, $this->policy[$parentKey]);
+		if (isset($this->policy[$parentKey][Helpers::EXTENDS_KEY])) {
+			$currentPolicy = $this->mergeExtends($currentPolicy, $this->policy[$parentKey][Helpers::EXTENDS_KEY]);
+		}
+		unset($currentPolicy[Helpers::EXTENDS_KEY]);
+		return $currentPolicy;
 	}
 
 
