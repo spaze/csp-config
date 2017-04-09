@@ -197,10 +197,13 @@ class Config
 	 */
 	private function addDirective($name, array $sources)
 	{
-		$nonceable = (isset($this->addNonce[$name], $this->nonceGenerator) && $this->addNonce[$name] && $this->nonceGenerator instanceof \Spaze\NonceGenerator\GeneratorInterface);
+		$nonceable = (isset($this->addNonce[$name]) && $this->addNonce[$name] && $this->nonceGenerator);
 		$values = ($nonceable ? "'nonce-" . $this->nonceGenerator->getNonce() . "' " : '');
 		$values .= (isset($this->addStrictDynamic[$name]) && $this->addStrictDynamic[$name] && $nonceable ? "'strict-dynamic' " : '');
-		foreach ($sources as &$source) {
+		foreach ($sources as $source) {
+			if ($source === "'nonce'" && $this->nonceGenerator) {
+				$source = "'nonce-" . $this->nonceGenerator->getNonce() . "'";
+			}
 			$values .= $source . ' ';
 		}
 		$this->directives[$name] = trim("$name $values");

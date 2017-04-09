@@ -187,6 +187,20 @@ class ConfigTest extends Tester\TestCase
 		Assert::same("script-src 'nonce-" . base64_encode($random) . "' 'strict-dynamic' 'self'; style-src https://foobar.example.com", $config->getHeader('Foo', 'bar'));
 	}
 
+
+	public function testGetHeaderWithNonceDirective()
+	{
+		$random = 'https://xkcd.com/221/';
+		$config = new Config(new NonceGeneratorMock($random));
+		$config->setPolicy([
+			'foo.bar' => [
+				'script-src' => ["'self'", "'nonce'"],
+				'style-src' => 'https://foobar.example.com',
+			]
+		]);
+		Assert::same("script-src 'self' 'nonce-" . base64_encode($random) . "'; style-src https://foobar.example.com", $config->getHeader('Foo', 'bar'));
+	}
+
 }
 
 $testCase = new ConfigTest();
