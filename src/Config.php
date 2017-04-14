@@ -26,12 +26,6 @@ class Config
 	/** @var array of name => array of policies */
 	protected $snippets = array();
 
-	/** @var array of directive => add? */
-	protected $addNonce = array();
-
-	/** @var array of directive => add? */
-	protected $addStrictDynamic = array();
-
 	/** @var array of snippet names */
 	protected $currentSnippets = array();
 
@@ -77,32 +71,6 @@ class Config
 	public function setSnippets(array $snippets)
 	{
 		$this->snippets = $snippets;
-		return $this;
-	}
-
-
-	/**
-	 * Set directives to which add nonce.
-	 *
-	 * @param array of directive => add?
-	 * @return self
-	 */
-	public function setAddNonce(array $addNonce)
-	{
-		$this->addNonce = $addNonce;
-		return $this;
-	}
-
-
-	/**
-	 * Set directives to which add 'strict-dynamic'.
-	 *
-	 * @param array of directive => add?
-	 * @return self
-	 */
-	public function setAddStrictDynamic(array $addStrictDynamic)
-	{
-		$this->addStrictDynamic = $addStrictDynamic;
 		return $this;
 	}
 
@@ -197,9 +165,7 @@ class Config
 	 */
 	private function addDirective($name, array $sources)
 	{
-		$nonceable = (isset($this->addNonce[$name]) && $this->addNonce[$name] && $this->nonceGenerator);
-		$values = ($nonceable ? "'nonce-" . $this->nonceGenerator->getNonce() . "' " : '');
-		$values .= (isset($this->addStrictDynamic[$name]) && $this->addStrictDynamic[$name] && $nonceable ? "'strict-dynamic' " : '');
+		$values = '';
 		foreach ($sources as $source) {
 			if ($source === "'nonce'" && $this->nonceGenerator) {
 				$source = "'nonce-" . $this->nonceGenerator->getNonce() . "'";
