@@ -1,4 +1,6 @@
 <?php
+declare(strict_types = 1);
+
 namespace Spaze\ContentSecurityPolicy;
 
 use Nette\DI\Config\Helpers;
@@ -53,7 +55,7 @@ class Config
 	 * @param array (key => array of policies)
 	 * @return self
 	 */
-	public function setPolicy(array $policy)
+	public function setPolicy(array $policy): self
 	{
 		foreach ($policy as $key => $sources) {
 			$this->policy[$key] = $sources;
@@ -68,7 +70,7 @@ class Config
 	 * @param array (key => array of policies)
 	 * @return self
 	 */
-	public function setSnippets(array $snippets)
+	public function setSnippets(array $snippets): self
 	{
 		$this->snippets = $snippets;
 		return $this;
@@ -82,7 +84,7 @@ class Config
 	 * @param  string $action
 	 * @return string
 	 */
-	public function getHeader($presenter, $action)
+	public function getHeader(string $presenter, string $action): string
 	{
 		$this->directives = array();
 
@@ -112,7 +114,7 @@ class Config
 	 * @param string $parentKey
 	 * @return array
 	 */
-	private function mergeExtends(array $currentPolicy, $parentKey)
+	private function mergeExtends(array $currentPolicy, string $parentKey): array
 	{
 		$currentPolicy = (array)Helpers::merge($currentPolicy, $this->policy[$parentKey]);
 		if (isset($this->policy[$parentKey][Helpers::EXTENDS_KEY])) {
@@ -129,7 +131,7 @@ class Config
 	 * @param string $snippetName
 	 * @return self
 	 */
-	public function addSnippet($snippetName)
+	public function addSnippet(string $snippetName): self
 	{
 		$this->currentSnippets[] = $snippetName;
 		return $this;
@@ -143,7 +145,7 @@ class Config
 	 * @param  string $action
 	 * @return string
 	 */
-	private function findConfigKey($presenter, $action)
+	private function findConfigKey(string $presenter, string $action): string
 	{
 		$parts = explode(':', strtolower($presenter));
 		$parts[] = strtolower($action);
@@ -163,7 +165,7 @@ class Config
 	 * @param string $name
 	 * @param array $sources
 	 */
-	private function addDirective($name, array $sources)
+	private function addDirective(string $name, array $sources)
 	{
 		$values = '';
 		foreach ($sources as $source) {
@@ -184,7 +186,7 @@ class Config
 	 *
 	 * @return string
 	 */
-	public function getDefaultKey()
+	public function getDefaultKey(): string
 	{
 		return self::DEFAULT_KEY;
 	}
@@ -195,7 +197,7 @@ class Config
 	 *
 	 * @return self
 	 */
-	public function supportLegacyBrowsers()
+	public function supportLegacyBrowsers(): self
 	{
 		$this->supportLegacyBrowsers = true;
 		return $this;

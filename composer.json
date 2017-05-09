@@ -10,6 +10,7 @@
 		}
 	],
 	"require": {
+		"php": "~7.0",
 		"nette/di": "~2.3"
 	},
 	"autoload": {
