@@ -17,7 +17,7 @@ class Config
 	/** @internal configuration key separator */
 	const KEY_SEPARATOR = '.';
 
-	/** @var \Spaze\NonceGenerator\Generator|null */
+	/** @var \Spaze\NonceGenerator\GeneratorInterface|null */
 	protected $nonceGenerator;
 
 	/** @var array of key => array of policies */
@@ -39,7 +39,7 @@ class Config
 	/**
 	 * Constructor.
 	 *
-	 * @param \Spaze\NonceGenerator\Generator $generator
+	 * @param \Spaze\NonceGenerator\GeneratorInterface $generator
 	 */
 	public function __construct(\Spaze\NonceGenerator\GeneratorInterface $generator = null)
 	{
@@ -114,7 +114,7 @@ class Config
 	 */
 	private function mergeExtends(array $currentPolicy, $parentKey)
 	{
-		$currentPolicy = Helpers::merge($currentPolicy, $this->policy[$parentKey]);
+		$currentPolicy = (array)Helpers::merge($currentPolicy, $this->policy[$parentKey]);
 		if (isset($this->policy[$parentKey][Helpers::EXTENDS_KEY])) {
 			$currentPolicy = $this->mergeExtends($currentPolicy, $this->policy[$parentKey][Helpers::EXTENDS_KEY]);
 		}

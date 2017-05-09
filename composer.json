@@ -21,7 +21,8 @@
 	"require-dev": {
 		"nette/tester": "^1.7",
 		"nette/bootstrap": "^2.3",
-		"paragonie/random_compat": "^2.0"
+		"paragonie/random_compat": "^2.0",
+		"phpstan/phpstan": "^0.6.4"
 	},
 	"suggest": {
 		"spaze/nonce-generator": "Generates nonces to be added to Content Security Policy header, if enabled",
