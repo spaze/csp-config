@@ -3,6 +3,8 @@ ga:
 		- https://www.google-analytics.com
 	script-src:
 		- https://www.google-analytics.com
+	connect-src:
+		- https://www.google-analytics.com
 slideshare:
 	child-src:
 		- https://www.slideshare.net
