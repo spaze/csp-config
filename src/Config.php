@@ -165,7 +165,7 @@ class Config
 	 * @param string $name
 	 * @param array $sources
 	 */
-	private function addDirective(string $name, array $sources)
+	private function addDirective(string $name, array $sources): void
 	{
 		$values = '';
 		foreach ($sources as $source) {

@@ -19,7 +19,7 @@ class ConfigExtension extends \Nette\DI\CompilerExtension
 	);
 
 
-	public function loadConfiguration()
+	public function loadConfiguration(): void
 	{
 		$config = $this->getConfig($this->defaults);
 		$builder = $this->getContainerBuilder();

@@ -18,7 +18,7 @@ class ConfigExtensionTest extends Tester\TestCase
 
 	public $tempDir;
 
-	protected function createCspConfig()
+	protected function createCspConfig(): CspConfig
 	{
 		$configurator = new Nette\Configurator();
 		$configurator->setTempDirectory($this->tempDir);
@@ -32,14 +32,14 @@ class ConfigExtensionTest extends Tester\TestCase
 	}
 
 
-	public function testService()
+	public function testService(): void
 	{
 		$config = $this->createCspConfig();
 		Assert::type(CspConfig::class, $config);
 	}
 
 
-	public function testConfig()
+	public function testConfig(): void
 	{
 		$config = $this->createCspConfig();
 		Assert::type(CspConfig::class, $config);
