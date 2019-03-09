@@ -22,7 +22,6 @@
 	"require-dev": {
 		"nette/tester": "^2.0",
 		"nette/bootstrap": "^2.3",
-		"paragonie/random_compat": "^2.0",
 		"phpstan/phpstan": "^0.11.2"
 	},
 	"suggest": {
