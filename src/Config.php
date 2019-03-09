@@ -52,7 +52,7 @@ class Config
 	/**
 	 * Set policy.
 	 *
-	 * @param array (key => array of policies)
+	 * @param string[][] $policy
 	 * @return self
 	 */
 	public function setPolicy(array $policy): self
@@ -67,7 +67,7 @@ class Config
 	/**
 	 * Set policy snippets.
 	 *
-	 * @param array (key => array of policies)
+	 * @param string[][] $snippets
 	 * @return self
 	 */
 	public function setSnippets(array $snippets): self
