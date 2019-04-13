@@ -20,22 +20,22 @@ class Config
 	private const EXTENDS_KEY = '@extends';
 
 	/** @var \Spaze\NonceGenerator\GeneratorInterface|null */
-	protected $nonceGenerator;
+	private $nonceGenerator;
 
 	/** @var array of key => array of policies */
-	protected $policy = array();
+	private $policy = array();
 
 	/** @var array of name => array of policies */
-	protected $snippets = array();
+	private $snippets = array();
 
 	/** @var array of snippet names */
-	protected $currentSnippets = array();
+	private $currentSnippets = array();
 
 	/** @var boolean */
-	protected $supportLegacyBrowsers = false;
+	private $supportLegacyBrowsers = false;
 
 	/** @var array */
-	protected $directives = array();
+	private $directives = array();
 
 
 	/**
