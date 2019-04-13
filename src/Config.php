@@ -13,11 +13,9 @@ use Nette\DI\Config\Helpers;
 class Config
 {
 
-	/** @internal configuration key for default values */
-	const DEFAULT_KEY = '*';
+	private const DEFAULT_KEY = '*';
 
-	/** @internal configuration key separator */
-	const KEY_SEPARATOR = '.';
+	private const KEY_SEPARATOR = '.';
 
 	/** @var \Spaze\NonceGenerator\GeneratorInterface|null */
 	protected $nonceGenerator;
