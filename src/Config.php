@@ -17,6 +17,8 @@ class Config
 
 	private const KEY_SEPARATOR = '.';
 
+	private const EXTENDS_KEY = '@extends';
+
 	/** @var \Spaze\NonceGenerator\GeneratorInterface|null */
 	protected $nonceGenerator;
 
@@ -87,8 +89,8 @@ class Config
 		$this->directives = array();
 
 		$configKey = $this->findConfigKey($presenter, $action);
-		if (isset($this->policy[$configKey][Helpers::EXTENDS_KEY])) {
-			$currentPolicy = $this->mergeExtends($this->policy[$configKey], $this->policy[$configKey][Helpers::EXTENDS_KEY]);
+		if (isset($this->policy[$configKey][self::EXTENDS_KEY])) {
+			$currentPolicy = $this->mergeExtends($this->policy[$configKey], $this->policy[$configKey][self::EXTENDS_KEY]);
 		} else {
 			$currentPolicy = $this->policy[$configKey];
 		}
@@ -115,10 +117,10 @@ class Config
 	private function mergeExtends(array $currentPolicy, string $parentKey): array
 	{
 		$currentPolicy = (array)Helpers::merge($currentPolicy, $this->policy[$parentKey]);
-		if (isset($this->policy[$parentKey][Helpers::EXTENDS_KEY])) {
-			$currentPolicy = $this->mergeExtends($currentPolicy, $this->policy[$parentKey][Helpers::EXTENDS_KEY]);
+		if (isset($this->policy[$parentKey][self::EXTENDS_KEY])) {
+			$currentPolicy = $this->mergeExtends($currentPolicy, $this->policy[$parentKey][self::EXTENDS_KEY]);
 		}
-		unset($currentPolicy[Helpers::EXTENDS_KEY]);
+		unset($currentPolicy[self::EXTENDS_KEY]);
 		return $currentPolicy;
 	}
 

@@ -19,7 +19,7 @@ class ConfigTest extends Tester\TestCase
 	public function testGetDefaultKey()
 	{
 		$config = new Config();
-		Assert::same(Config::DEFAULT_KEY, $config->getDefaultKey());
+		Assert::same('*', $config->getDefaultKey());
 	}
 
 
@@ -135,7 +135,7 @@ class ConfigTest extends Tester\TestCase
 				'img-src' => ['https://default.example.com'],
 			],
 			'foo.bar' => [
-				\Nette\DI\Config\Helpers::EXTENDS_KEY => '*.*',
+				'@extends' => '*.*',
 				'default-src' => ['https://extends.example.com'],
 				'img-src' => ['https://extends.example.com'],
 			],
@@ -153,12 +153,12 @@ class ConfigTest extends Tester\TestCase
 				'img-src' => ['https://default.example.com'],
 			],
 			'foo.bar' => [
-				\Nette\DI\Config\Helpers::EXTENDS_KEY => '*.*',
+				'@extends' => '*.*',
 				'default-src' => ['https://extends.example.com'],
 				'img-src' => ['https://extends.example.com'],
 			],
 			'bar.baz' => [
-				\Nette\DI\Config\Helpers::EXTENDS_KEY => 'foo.bar',
+				'@extends' => 'foo.bar',
 				'connect-src' => ['https://extends.example.com'],
 			],
 		]);

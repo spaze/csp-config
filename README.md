@@ -48,12 +48,16 @@ contentSecurityPolicy:
                 - "'self'"
                 - "'report-sample'"
             upgrade-insecure-requests:
-        www.trainings.training < www.*.*:
+        www.trainings.training:
+            @extends: www.*.*
             connect-src: https://api.example.com
-        admin.*.* < www.*.*:
-        admin.blog.add < admin.*.*:
+        admin.*.*:
+            @extends: www.*.*
+        admin.blog.add:
+            @extends: admin.*.*
             connect-src: "'self'"
-        admin.blog.edit < admin.blog.add:
+        admin.blog.edit:
+            @extends: admin.blog.add
 ```
 
 Let's explain:
@@ -67,7 +71,7 @@ This is where you define your snippets. A snippet consists of one or more Conten
 Your CSP policies go here. The keys below mean `[module.]presenter.action`, wildcards are supported.
   - `*.*` means *use these for all presenters and actions*. As you can see in the example above, I've used quite restrictive policy and will allow more later on. 
   - `www.*.*` applies to all presenters and actions in the "www" module.
-  - `www.trainings.training < www.*.*` this configuration extends the `www.*.*` configuration, any values specified will be added. Use it to extend the default policy for some pages or actions.
+  - `@extends: www.*.*` this configuration extends the `www.*.*` configuration, any values specified will be added. Use it to extend the default policy for some pages or actions.
 
 Policies can contain a few special keys and values:
 - keys with no values, like `upgrade-insecure-requests:` in the example above, will make the policy header contain just the key name and no values
