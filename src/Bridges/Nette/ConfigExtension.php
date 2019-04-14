@@ -11,17 +11,25 @@ namespace Spaze\ContentSecurityPolicy\Bridges\Nette;
 class ConfigExtension extends \Nette\DI\CompilerExtension
 {
 
+	private $defaults = array(
+		'snippets' => [],
+		'policies' => [],
+		'supportLegacyBrowsers' => false,
+	);
+
+
 	public function loadConfiguration(): void
 	{
-		$config = $this->getConfig();
+		$this->validateConfig($this->defaults);
+
 		$builder = $this->getContainerBuilder();
 
 		$cspConfig = $builder->addDefinition($this->prefix('config'))
 			->setClass('Spaze\ContentSecurityPolicy\Config')
-			->addSetup('setPolicy', array($config['policies'] ?? []))
-			->addSetup('setSnippets', array($config['snippets'] ?? []));
+			->addSetup('setPolicy', array($this->config['policies']))
+			->addSetup('setSnippets', array($this->config['snippets']));
 
-		if ($config['supportLegacyBrowsers'] ?? false) {
+		if ($this->config['supportLegacyBrowsers']) {
 			$cspConfig->addSetup('supportLegacyBrowsers');
 		}
 	}
