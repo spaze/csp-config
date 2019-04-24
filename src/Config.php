@@ -96,12 +96,12 @@ class Config
 		}
 		foreach ($this->currentSnippets as $snippetName) {
 			foreach ($this->snippets[$snippetName] as $directive => $sources) {
-				$currentPolicy[$directive] = (isset($currentPolicy[$directive]) ? array_merge((array)$currentPolicy[$directive], $sources) : $sources);
+				$currentPolicy[$directive] = (isset($currentPolicy[$directive]) ? array_merge($currentPolicy[$directive], $sources) : $sources);
 			}
 		}
 
 		foreach ($currentPolicy as $directive => $sources) {
-			$this->addDirective($directive, (array)$sources);
+			$this->addDirective($directive, $sources);
 		}
 		return implode('; ', $this->directives);
 	}

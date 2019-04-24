@@ -28,8 +28,8 @@ class ConfigTest extends Tester\TestCase
 		$config = new Config();
 		$config->setPolicy([
 			'*.*' => [
-				'default-src' => "'none'",
-				'img-src' => 'https://example.com',
+				'default-src' => ["'none'"],
+				'img-src' => ['https://example.com'],
 			]
 		]);
 		Assert::same("default-src 'none'; img-src https://example.com", $config->getHeader('Foo', 'bar'));
@@ -41,8 +41,8 @@ class ConfigTest extends Tester\TestCase
 		$config = new Config();
 		$config->setPolicy([
 			'foo.*' => [
-				'default-src' => "'none'",
-				'img-src' => 'https://foo.example.com',
+				'default-src' => ["'none'"],
+				'img-src' => ['https://foo.example.com'],
 			]
 		]);
 		Assert::same("default-src 'none'; img-src https://foo.example.com", $config->getHeader('Foo', 'bar'));
@@ -54,8 +54,8 @@ class ConfigTest extends Tester\TestCase
 		$config = new Config();
 		$config->setPolicy([
 			'foo.bar' => [
-				'default-src' => "'none'",
-				'img-src' => 'https://foobar.example.com',
+				'default-src' => ["'none'"],
+				'img-src' => ['https://foobar.example.com'],
 			]
 		]);
 		Assert::same("default-src 'none'; img-src https://foobar.example.com", $config->getHeader('Foo', 'bar'));
@@ -67,8 +67,8 @@ class ConfigTest extends Tester\TestCase
 		$config = new Config();
 		$config->setPolicy([
 			'foo.foo.bar' => [
-				'default-src' => "'none'",
-				'img-src' => 'https://foobar.example.com',
+				'default-src' => ["'none'"],
+				'img-src' => ['https://foobar.example.com'],
 			]
 		]);
 		Assert::same("default-src 'none'; img-src https://foobar.example.com", $config->getHeader('Foo:Foo', 'bar'));
@@ -80,11 +80,11 @@ class ConfigTest extends Tester\TestCase
 		$config = new Config();
 		$config->setPolicy([
 			'*.*.*' => [
-				'default-src' => "'none'",
-				'img-src' => 'https://default.example.com',
+				'default-src' => ["'none'"],
+				'img-src' => ['https://default.example.com'],
 			],
 			'foo.bar' => [
-				'default-src' => "'none'",
+				'default-src' => ["'none'"],
 				'img-src' => 'https://foobar.example.com',
 			],
 		]);
@@ -97,8 +97,8 @@ class ConfigTest extends Tester\TestCase
 		$config = new Config();
 		$config->setPolicy([
 			'foo.bar' => [
-				'default-src' => "'none'",
-				'child-src' => 'https://example.com',
+				'default-src' => ["'none'"],
+				'child-src' => ['https://example.com'],
 			]
 		]);
 		Assert::same("default-src 'none'; child-src https://example.com", $config->getHeader('Foo', 'bar'));
@@ -112,8 +112,8 @@ class ConfigTest extends Tester\TestCase
 		$config = new Config();
 		$config->setPolicy([
 			'foo.*' => [
-				'default-src' => "'none'",
-				'img-src' => 'https://foo.example.com',
+				'default-src' => ["'none'"],
+				'img-src' => ['https://foo.example.com'],
 			]
 		]);
 		$config->setSnippets([
@@ -173,7 +173,7 @@ class ConfigTest extends Tester\TestCase
 		$config->setPolicy([
 			'foo.bar' => [
 				'script-src' => ["'self'", "'nonce'"],
-				'style-src' => 'https://foobar.example.com',
+				'style-src' => ['https://foobar.example.com'],
 			]
 		]);
 		Assert::same("script-src 'self' 'nonce-" . base64_encode($random) . "'; style-src https://foobar.example.com", $config->getHeader('Foo', 'bar'));
