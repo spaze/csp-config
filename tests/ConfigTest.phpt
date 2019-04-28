@@ -135,7 +135,7 @@ class ConfigTest extends Tester\TestCase
 				'img-src' => ['https://default.example.com'],
 			],
 			'foo.bar' => [
-				'@extends' => '*.*',
+				'@extends' => ['*.*'],
 				'default-src' => ['https://extends.example.com'],
 				'img-src' => ['https://extends.example.com'],
 			],
@@ -153,12 +153,12 @@ class ConfigTest extends Tester\TestCase
 				'img-src' => ['https://default.example.com'],
 			],
 			'foo.bar' => [
-				'@extends' => '*.*',
+				'@extends' => ['*.*'],
 				'default-src' => ['https://extends.example.com'],
 				'img-src' => ['https://extends.example.com'],
 			],
 			'bar.baz' => [
-				'@extends' => 'foo.bar',
+				'@extends' => ['foo.bar'],
 				'connect-src' => ['https://extends.example.com'],
 			],
 		]);

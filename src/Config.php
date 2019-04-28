@@ -111,11 +111,12 @@ class Config
 	 * Merge parent policies.
 	 *
 	 * @param array $currentPolicy
-	 * @param string $parentKey
+	 * @param string[] $parentKeys
 	 * @return array
 	 */
-	private function mergeExtends(array $currentPolicy, string $parentKey): array
+	private function mergeExtends(array $currentPolicy, array $parentKeys): array
 	{
+		$parentKey = current($parentKeys);
 		$currentPolicy = (array)Helpers::merge($currentPolicy, $this->policy[$parentKey]);
 		if (isset($this->policy[$parentKey][self::EXTENDS_KEY])) {
 			$currentPolicy = $this->mergeExtends($currentPolicy, $this->policy[$parentKey][self::EXTENDS_KEY]);
