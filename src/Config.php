@@ -78,6 +78,17 @@ class Config
 
 
 	/**
+	 * Get policy snippets.
+	 *
+	 * @return string[][]
+	 */
+	public function getSnippets(): array
+	{
+		return $this->snippets;
+	}
+
+
+	/**
 	 * Get Content-Security-Policy header value.
 	 *
 	 * @param  string $presenter
