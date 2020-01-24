@@ -39,11 +39,6 @@ class Config
 	private $directives = [];
 
 
-	/**
-	 * Constructor.
-	 *
-	 * @param GeneratorInterface $generator
-	 */
 	public function __construct(GeneratorInterface $generator = null)
 	{
 		$this->nonceGenerator = $generator;
@@ -51,8 +46,6 @@ class Config
 
 
 	/**
-	 * Set policy.
-	 *
 	 * @param array<string, array<string, string|array<integer, string>>> $policy
 	 * @return self
 	 */
@@ -66,8 +59,6 @@ class Config
 
 
 	/**
-	 * Set policy snippets.
-	 *
 	 * @param array<string, array<string, array<integer, string>>> $snippets
 	 * @return self
 	 */
@@ -79,8 +70,6 @@ class Config
 
 
 	/**
-	 * Get policy snippets.
-	 *
 	 * @return array<string, array<string, array<integer, string>>>
 	 */
 	public function getSnippets(): array
@@ -91,10 +80,6 @@ class Config
 
 	/**
 	 * Get Content-Security-Policy header value.
-	 *
-	 * @param  string $presenter
-	 * @param  string $action
-	 * @return string
 	 */
 	public function getHeader(string $presenter, string $action): string
 	{
@@ -120,8 +105,6 @@ class Config
 
 
 	/**
-	 * Merge parent policies.
-	 *
 	 * @param array<string, string|array<integer, string>> $currentPolicy
 	 * @param array<integer, string> $parentKeys
 	 * @return array<string, array<string, string>>
@@ -140,9 +123,6 @@ class Config
 
 	/**
 	 * Add named snippet to current CSP config.
-	 *
-	 * @param string $snippetName
-	 * @return self
 	 */
 	public function addSnippet(string $snippetName): self
 	{
@@ -151,13 +131,6 @@ class Config
 	}
 
 
-	/**
-	 * Find CSP policy config key.
-	 *
-	 * @param  string $presenter
-	 * @param  string $action
-	 * @return string
-	 */
 	private function findConfigKey(string $presenter, string $action): string
 	{
 		$parts = explode(':', strtolower($presenter));
@@ -173,8 +146,6 @@ class Config
 
 
 	/**
-	 * Format and add a directive.
-	 *
 	 * @param string $name
 	 * @param array<integer, string> $sources
 	 */
@@ -196,8 +167,6 @@ class Config
 
 	/**
 	 * Get default config key.
-	 *
-	 * @return string
 	 */
 	public function getDefaultKey(): string
 	{
@@ -206,9 +175,7 @@ class Config
 
 
 	/**
-	 * Enable legacy browser (i.e. Safari) support
-	 *
-	 * @return self
+	 * Enable legacy browser (i.e. some older Safaris) support
 	 */
 	public function supportLegacyBrowsers(): self
 	{
