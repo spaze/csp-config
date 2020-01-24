@@ -1,6 +1,4 @@
 parameters:
 	autoload_directories:
 		- src
-
-includes:
-	- vendor/phpstan/phpstan/conf/config.level5.neon
+	level: 6
