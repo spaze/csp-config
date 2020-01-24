@@ -22,19 +22,19 @@ class Config
 	/** @var \Spaze\NonceGenerator\GeneratorInterface|null */
 	private $nonceGenerator;
 
-	/** @var array of key => array of policies */
+	/** @var array<string, array<string, string|array<integer, string>>> */
 	private $policy = array();
 
-	/** @var array of name => array of policies */
+	/** @var array<string, array<string, array<integer, string>>> */
 	private $snippets = array();
 
-	/** @var array of snippet names */
+	/** @var array<integer, string> */
 	private $currentSnippets = array();
 
 	/** @var boolean */
 	private $supportLegacyBrowsers = false;
 
-	/** @var array */
+	/** @var array<string, string> */
 	private $directives = array();
 
 
@@ -52,7 +52,7 @@ class Config
 	/**
 	 * Set policy.
 	 *
-	 * @param string[][] $policy
+	 * @param array<string, array<string, string|array<integer, string>>> $policy
 	 * @return self
 	 */
 	public function setPolicy(array $policy): self
@@ -67,7 +67,7 @@ class Config
 	/**
 	 * Set policy snippets.
 	 *
-	 * @param string[][] $snippets
+	 * @param array<string, array<string, array<integer, string>>> $snippets
 	 * @return self
 	 */
 	public function setSnippets(array $snippets): self
@@ -80,7 +80,7 @@ class Config
 	/**
 	 * Get policy snippets.
 	 *
-	 * @return string[][]
+	 * @return array<string, array<string, array<integer, string>>>
 	 */
 	public function getSnippets(): array
 	{
@@ -121,9 +121,9 @@ class Config
 	/**
 	 * Merge parent policies.
 	 *
-	 * @param array $currentPolicy
-	 * @param string[] $parentKeys
-	 * @return array
+	 * @param array<string, string|array<integer, string>> $currentPolicy
+	 * @param array<integer, string> $parentKeys
+	 * @return array<string, array<string, string>>
 	 */
 	private function mergeExtends(array $currentPolicy, array $parentKeys): array
 	{
@@ -175,7 +175,7 @@ class Config
 	 * Format and add a directive.
 	 *
 	 * @param string $name
-	 * @param array $sources
+	 * @param array<integer, string> $sources
 	 */
 	private function addDirective(string $name, array $sources): void
 	{
