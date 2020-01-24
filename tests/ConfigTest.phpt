@@ -9,6 +9,7 @@
  */
 
 use Spaze\ContentSecurityPolicy\Config;
+use Spaze\NonceGenerator\NonceGeneratorMock;
 use Tester\Assert;
 
 require __DIR__ . '/../vendor/autoload.php';

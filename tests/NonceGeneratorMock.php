@@ -2,17 +2,15 @@
 namespace Spaze\NonceGenerator {
 	interface GeneratorInterface
 	{
-		public function getNonce();
+		public function getNonce(): string;
 	}
-}
 
-namespace {
 	/**
 	 * Nonce Generator service mock.
 	 *
 	 * @author Michal Špaček
 	 */
-	class NonceGeneratorMock implements \Spaze\NonceGenerator\GeneratorInterface
+	class NonceGeneratorMock implements GeneratorInterface
 	{
 
 		/** @var string */
@@ -35,7 +33,7 @@ namespace {
 		 *
 		 * @return string
 		 */
-		public function getNonce()
+		public function getNonce(): string
 		{
 			return base64_encode($this->random);
 		}

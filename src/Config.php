@@ -4,6 +4,7 @@ declare(strict_types = 1);
 namespace Spaze\ContentSecurityPolicy;
 
 use Nette\DI\Config\Helpers;
+use Spaze\NonceGenerator\GeneratorInterface;
 
 /**
  * ContentSecurityPolicy\Config service.
@@ -19,7 +20,7 @@ class Config
 
 	private const EXTENDS_KEY = '@extends';
 
-	/** @var \Spaze\NonceGenerator\GeneratorInterface|null */
+	/** @var GeneratorInterface|null */
 	private $nonceGenerator;
 
 	/** @var array<string, array<string, string|array<integer, string>>> */
@@ -41,9 +42,9 @@ class Config
 	/**
 	 * Constructor.
 	 *
-	 * @param \Spaze\NonceGenerator\GeneratorInterface $generator
+	 * @param GeneratorInterface $generator
 	 */
-	public function __construct(\Spaze\NonceGenerator\GeneratorInterface $generator = null)
+	public function __construct(GeneratorInterface $generator = null)
 	{
 		$this->nonceGenerator = $generator;
 	}
