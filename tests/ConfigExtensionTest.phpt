@@ -1,33 +1,31 @@
 <?php
+declare(strict_types = 1);
 
-/**
- * Test: Spaze\ContentSecurityPolicy\Bridges\Nette\ConfigExtension.
- *
- * @testCase Spaze\ContentSecurityPolicy\ConfigExtensionTest
- * @author Michal Špaček
- * @package Spaze\ContentSecurityPolicy\Config
- */
+namespace Spaze\ContentSecurityPolicy\Bridges\Nette;
 
+use Nette\Configurator;
 use Spaze\ContentSecurityPolicy\Config as CspConfig;
 use Tester\Assert;
+use Tester\Helpers;
+use Tester\TestCase;
 
 require __DIR__ . '/../vendor/autoload.php';
 
-class ConfigExtensionTest extends Tester\TestCase
+class ConfigExtensionTest extends TestCase
 {
 
 	public $tempDir;
 
 	protected function createCspConfig(): CspConfig
 	{
-		$configurator = new Nette\Configurator();
+		$configurator = new Configurator();
 		$configurator->setTempDirectory($this->tempDir);
 		$configurator->addParameters(['appDir' => __DIR__]);
 		$configurator->addConfig(__DIR__ . '/config.neon');
 		$container = $configurator->createContainer();
 
 		$cspConfig = $container->getByType(CspConfig::class);
-		/** @var Spaze\ContentSecurityPolicy\Config $cspConfig */
+		/** @var CspConfig $cspConfig */
 		return $cspConfig;
 	}
 
@@ -52,5 +50,5 @@ class ConfigExtensionTest extends Tester\TestCase
 
 $testCase = new ConfigExtensionTest();
 $testCase->tempDir = __DIR__ . '/../temp/tests';
-Tester\Helpers::purge($testCase->tempDir);
+Helpers::purge($testCase->tempDir);
 $testCase->run();

@@ -1,20 +1,16 @@
 <?php
+declare(strict_types = 1);
 
-/**
- * Test: Spaze\ContentSecurityPolicy\Config.
- *
- * @testCase Spaze\ContentSecurityPolicy\ConfigTest
- * @author Michal Špaček
- * @package Spaze\ContentSecurityPolicy\Config
- */
+namespace Spaze\ContentSecurityPolicy;
 
 use Spaze\ContentSecurityPolicy\Config;
 use Spaze\NonceGenerator\NonceGeneratorMock;
 use Tester\Assert;
+use Tester\TestCase;
 
 require __DIR__ . '/../vendor/autoload.php';
 
-class ConfigTest extends Tester\TestCase
+class ConfigTest extends TestCase
 {
 
 	public function testGetDefaultKey()
