@@ -47,8 +47,8 @@ class ConfigExtension extends \Nette\DI\CompilerExtension
 
 		$cspConfig = $builder->addDefinition($this->prefix('config'))
 			->setClass('Spaze\ContentSecurityPolicy\Config')
-			->addSetup('setPolicy', array($this->config->policies))
-			->addSetup('setSnippets', array($this->config->snippets));
+			->addSetup('setPolicy', [$this->config->policies])
+			->addSetup('setSnippets', [$this->config->snippets]);
 
 		if ($this->config->supportLegacyBrowsers) {
 			$cspConfig->addSetup('supportLegacyBrowsers');

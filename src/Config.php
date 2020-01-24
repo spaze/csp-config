@@ -23,19 +23,19 @@ class Config
 	private $nonceGenerator;
 
 	/** @var array<string, array<string, string|array<integer, string>>> */
-	private $policy = array();
+	private $policy = [];
 
 	/** @var array<string, array<string, array<integer, string>>> */
-	private $snippets = array();
+	private $snippets = [];
 
 	/** @var array<integer, string> */
-	private $currentSnippets = array();
+	private $currentSnippets = [];
 
 	/** @var boolean */
 	private $supportLegacyBrowsers = false;
 
 	/** @var array<string, string> */
-	private $directives = array();
+	private $directives = [];
 
 
 	/**
@@ -97,7 +97,7 @@ class Config
 	 */
 	public function getHeader(string $presenter, string $action): string
 	{
-		$this->directives = array();
+		$this->directives = [];
 
 		$configKey = $this->findConfigKey($presenter, $action);
 		if (isset($this->policy[$configKey][self::EXTENDS_KEY])) {
