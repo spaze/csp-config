@@ -43,7 +43,7 @@ class ConfigExtensionTest extends TestCase
 		Assert::type(CspConfig::class, $config);
 
 		$config->addSnippet('ga');
-		Assert::same("child-src foo bar; frame-src foo bar; style-src foo bar; script-src foo bar; img-src https://www.google-analytics.com", $config->getHeader('Foo', 'bar'));
+		Assert::same("child-src foo bar; style-src foo bar; script-src foo bar; img-src https://www.google-analytics.com", $config->getHeader('Foo', 'bar'));
 	}
 
 }

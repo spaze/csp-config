@@ -32,9 +32,6 @@ class Config
 	/** @var array<integer, string> */
 	private $currentSnippets = [];
 
-	/** @var boolean */
-	private $supportLegacyBrowsers = false;
-
 	/** @var array<string, string> */
 	private $directives = [];
 
@@ -159,9 +156,6 @@ class Config
 			$values .= $source . ' ';
 		}
 		$this->directives[$name] = trim("$name $values");
-		if ($name === 'child-src' && $this->supportLegacyBrowsers) {
-			$this->directives['frame-src'] = trim("frame-src $values");
-		}
 	}
 
 
@@ -175,11 +169,11 @@ class Config
 
 
 	/**
-	 * Enable legacy browser (i.e. some older Safaris) support
+	 * @deprecated
 	 */
 	public function supportLegacyBrowsers(): self
 	{
-		$this->supportLegacyBrowsers = true;
+		trigger_error('Calling supportLegacyBrowsers() is deprecated, was needed for browsers that support only CSP1. If you still need to support those (you do not), add frame-src with the same values as child-src, if you use child-src in your policy', E_USER_DEPRECATED);
 		return $this;
 	}
 

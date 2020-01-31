@@ -2,7 +2,6 @@ extensions:
 	contentSecurityPolicy: Spaze\ContentSecurityPolicy\Bridges\Nette\ConfigExtension
 
 contentSecurityPolicy:
-	supportLegacyBrowsers: true
 	snippets:
 		ga:
 			img-src:

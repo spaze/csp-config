@@ -89,21 +89,6 @@ class ConfigTest extends TestCase
 	}
 
 
-	public function testGetHeaderLegacyBrowser()
-	{
-		$config = new Config();
-		$config->setPolicy([
-			'foo.bar' => [
-				'default-src' => ["'none'"],
-				'child-src' => ['https://example.com'],
-			]
-		]);
-		Assert::same("default-src 'none'; child-src https://example.com", $config->getHeader('Foo', 'bar'));
-		$config->supportLegacyBrowsers();
-		Assert::same("default-src 'none'; child-src https://example.com; frame-src https://example.com", $config->getHeader('Foo', 'bar'));
-	}
-
-
 	public function testGetHeaderDefaultActionWithSnippets()
 	{
 		$config = new Config();

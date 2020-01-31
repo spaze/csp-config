@@ -29,7 +29,6 @@ This is an example configuration, it's here to explain things and it's intention
 
 ```yaml
 contentSecurityPolicy:
-    supportLegacyBrowsers: true
     snippets:
         slideshare:
             child-src:
@@ -61,9 +60,6 @@ contentSecurityPolicy:
 ```
 
 Let's explain:
-- `supportLegacyBrowsers`
-For now it takes values from `child-src` and copies them to `frame-src` because some older browsers do not understand `child-src`. By default this is disabled but you may want to enable it.
-
 - `snippets`
 This is where you define your snippets. A snippet consists of one or more Content Security Policy directives that can be added to the current Content Security Policy header with the `addSnippet(string $snippetName)` method like this: `$this->contentSecurityPolicy->addSnippet($type);` You can use it to add use it to extend your policy when there's a video on the page for example. There are sample snippets in [snippets.neon](https://github.com/spaze/csp-config/blob/master/snippets.neon) which you can directly include in your configuration if you want.
 
