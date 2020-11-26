@@ -65,7 +65,7 @@ This is where you define your snippets. A snippet consists of one or more Conten
 
 - `policies`
 Your CSP policies go here. The keys below mean `[module.]presenter.action`, wildcards are supported.
-  - `*.*` means *use these for all presenters and actions*. As you can see in the example above, I've used quite restrictive policy and will allow more later on. 
+  - `*.*` means *use these for all presenters and actions*. As you can see in the example above, I've used quite restrictive policy and will allow more later on.
   - `www.*.*` applies to all presenters and actions in the "www" module.
   - `@extends: www.*.*` this configuration extends the `www.*.*` configuration, any values specified will be added. Use it to extend the default policy for some pages or actions.
 
