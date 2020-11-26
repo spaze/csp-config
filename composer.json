@@ -10,9 +10,9 @@
 		}
 	],
 	"require": {
-		"php": "~7.1",
+		"php": "^7.1 || ^8.0",
 		"nette/di": "^3.0",
-		"spaze/nonce-generator": "^3.0"
+		"spaze/nonce-generator": "^3.0.2"
 	},
 	"autoload": {
 		"psr-4": {"Spaze\\ContentSecurityPolicy\\": "src"}
