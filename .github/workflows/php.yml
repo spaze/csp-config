@@ -1,0 +1,47 @@
+name: PHP Tests
+
+on: [push, pull_request]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        php-version:
+          - 7.1
+          - 7.2
+          - 7.3
+          - 7.4
+          - 8.0
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: OS info
+      run: cat /etc/os-release
+
+    - name: "Install PHP"
+      uses: shivammathur/setup-php@v2
+      with:
+        coverage: "none"
+        php-version: "${{ matrix.php-version }}"
+
+    - name: PHP info
+      run: |
+        php -v
+        php -m
+
+    - name: Validate composer.json
+      run: composer validate --strict --no-interaction
+
+    - name: Install dependencies
+      run: composer update --no-progress --no-interaction
+
+    - name: Run tests
+      run: composer test
+
+    - name: Failed test output, if any
+      if: failure()
+      run: for i in $(find ./site/tests -name \*.actual); do echo "--- $i"; cat $i; echo; echo; done

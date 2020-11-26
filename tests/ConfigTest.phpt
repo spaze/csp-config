@@ -4,7 +4,7 @@ declare(strict_types = 1);
 namespace Spaze\ContentSecurityPolicy;
 
 use Spaze\ContentSecurityPolicy\Config;
-use Spaze\NonceGenerator\NonceGeneratorMock;
+use Spaze\ContentSecurityPolicy\NonceGeneratorMock;
 use Tester\Assert;
 use Tester\TestCase;
 
