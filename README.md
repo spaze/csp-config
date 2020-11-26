@@ -71,7 +71,7 @@ Your CSP policies go here. The keys below mean `[module.]presenter.action`, wild
 
 Policies can contain a few special keys and values:
 - keys with no values, like `upgrade-insecure-requests:` in the example above, will make the policy header contain just the key name and no values
-- `'nonce'` will add a CSP nonce (`'nonce-somethingrandomandunique`') to the header. Nonces were defined in CSP2 and are used in a recommended policy using [CSP3 `'strict-dynamic'`](https://exploited.cz/xss/csp/strict.php). For this to work you'd need [spaze/nonce-generator](https://github.com/spaze/nonce-generator) which will also return the nonce so you can add it to your `<script>` tags. This can be nicely automated with [spaze/sri-macros](https://github.com/spaze/sri-macros).
+- `'nonce'` will add a CSP nonce (`'nonce-somethingrandomandunique`') to the header. Nonces were defined in CSP2 and are used in a recommended policy using [CSP3 `'strict-dynamic'`](https://exploited.cz/xss/csp/strict.php). For this to work [spaze/nonce-generator](https://github.com/spaze/nonce-generator) is needed. It will also return the immutable nonce so you can add it to your `<script>` tags. This can be nicely automated with [spaze/sri-macros](https://github.com/spaze/sri-macros).
 
 ### How to send the generated header in Nette Framework
 ```php
