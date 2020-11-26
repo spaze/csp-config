@@ -1,7 +1,7 @@
 # csp-config
 Build Content Security Policy from a config file. Supports different policy per page or module, and snippets you can add dynamically, if needed.
 
-[![Build Status](https://travis-ci.org/spaze/csp-config.svg?branch=master)](https://travis-ci.org/spaze/csp-config)
+[![PHP Tests](https://github.com/spaze/csp-config/workflows/PHP%20Tests/badge.svg)](https://github.com/spaze/csp-config/actions?query=workflow%3A%22PHP+Tests%22)
 
 The library is designed to be usable with any framework (or without one) but comes with a bridge for [Nette Framework](https://nette.org/).
 
