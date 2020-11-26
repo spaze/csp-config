@@ -24,6 +24,14 @@
 		"nette/bootstrap": "^3.0",
 		"phpstan/phpstan": "^0.12"
 	},
+	"scripts": {
+		"phpstan": "vendor/phpstan/phpstan/phpstan --ansi analyse --configuration phpstan.neon",
+		"tester": "vendor/nette/tester/src/tester -c tests/php-unix.ini --colors 1 tests/",
+		"test": [
+			"@phpstan",
+			"@tester"
+		]
+	},
 	"suggest": {
 		"spaze/nonce-generator": "Generates nonces to be added to Content Security Policy header, if enabled",
 		"spaze/sri-macros": "For script tags with automatically added nonces, and Subresource Integrity hashes, too"
