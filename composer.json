@@ -26,7 +26,7 @@
 		"phpstan/phpstan": "^0.12",
 		"php-parallel-lint/php-parallel-lint": "^1.2",
 		"php-parallel-lint/php-console-highlighter": "^0.5.0",
-		"spaze/coding-standard": "^0.0.4"
+		"spaze/coding-standard": "^0.0"
 	},
 	"scripts": {
 		"lint": "vendor/bin/parallel-lint --colors src/ tests/",
