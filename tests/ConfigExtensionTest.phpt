@@ -25,13 +25,18 @@ class ConfigExtensionTest extends TestCase
 
 	protected function setUp(): void
 	{
+		$this->cspConfig = $this->getService(__DIR__ . '/config.neon');
+	}
+
+
+	private function getService(string $config): CspConfig
+	{
 		$configurator = new Configurator();
 		$configurator->setTempDirectory($this->tempDir);
 		$configurator->addParameters(['appDir' => __DIR__]);
-		$configurator->addConfig(__DIR__ . '/config.neon');
+		$configurator->addConfig($config);
 		$container = $configurator->createContainer();
-
-		$this->cspConfig = $container->getByType(CspConfig::class);
+		return $container->getByType(CspConfig::class);
 	}
 
 
@@ -52,7 +57,16 @@ class ConfigExtensionTest extends TestCase
 		Assert::type(CspConfig::class, $this->cspConfig);
 
 		$this->cspConfig->addSnippet('ga');
-		Assert::same("child-src foo bar; style-src foo bar; script-src foo bar; img-src https://www.google-analytics.com", $this->cspConfig->getHeader('Foo', 'bar'));
+		Assert::same('child-src foo bar; style-src foo bar; script-src foo bar; img-src https://www.google-analytics.com', $this->cspConfig->getHeader('Foo', 'bar'));
+	}
+
+
+	public function testReportOnlyConfig(): void
+	{
+		$cspConfig = $this->getService(__DIR__ . '/config-with-report-only.neon');
+		$this->cspConfig->addSnippet('ga');
+		Assert::same('child-src foo bar; style-src foo bar; script-src foo bar', $cspConfig->getHeader('Foo', 'bar'));
+		Assert::same('form-action foobar; script-src waldo quux', $cspConfig->getHeaderReportOnly('Foo', 'bar'));
 	}
 
 }
