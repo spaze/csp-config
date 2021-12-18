@@ -212,14 +212,4 @@ class Config
 		return self::DEFAULT_KEY;
 	}
 
-
-	/**
-	 * @deprecated
-	 */
-	public function supportLegacyBrowsers(): self
-	{
-		trigger_error('Calling supportLegacyBrowsers() is deprecated, was needed for browsers that support only CSP1. If you still need to support those (you do not), add frame-src with the same values as child-src, if you use child-src in your policy', E_USER_DEPRECATED);
-		return $this;
-	}
-
 }

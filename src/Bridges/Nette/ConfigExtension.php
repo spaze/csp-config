@@ -31,7 +31,6 @@ class ConfigExtension extends CompilerExtension
 			)
 		);
 		return Expect::structure([
-			'supportLegacyBrowsers' => Expect::bool()->default(false),
 			'snippets' => (clone $expectPolicies)->default([]),
 			'policies' => (clone $expectPolicies)->required(),
 			'policiesReportOnly' => (clone $expectPolicies)->default([]),
@@ -41,17 +40,11 @@ class ConfigExtension extends CompilerExtension
 
 	public function loadConfiguration(): void
 	{
-		$builder = $this->getContainerBuilder();
-
-		$cspConfig = $builder->addDefinition($this->prefix('config'))
+		$this->getContainerBuilder()->addDefinition($this->prefix('config'))
 			->setType('Spaze\ContentSecurityPolicy\Config')
 			->addSetup('setPolicy', [$this->config->policies])
 			->addSetup('setPolicyReportOnly', [$this->config->policiesReportOnly])
 			->addSetup('setSnippets', [$this->config->snippets]);
-
-		if ($this->config->supportLegacyBrowsers) {
-			$cspConfig->addSetup('supportLegacyBrowsers');
-		}
 	}
 
 }
