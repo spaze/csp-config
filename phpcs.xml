@@ -5,5 +5,8 @@
 	<arg name="colors"/>
 	<arg value="s"/>
 	<arg value="p"/>
-	<rule ref="vendor/spaze/coding-standard/src/ruleset.xml"/>
+	<rule ref="vendor/spaze/coding-standard/src/ruleset.xml">
+		<exclude name="SlevomatCodingStandard.Functions.RequireTrailingCommaInCall" />
+		<exclude name="SlevomatCodingStandard.Functions.RequireTrailingCommaInDeclaration" />
+	</rule>
 </ruleset>
