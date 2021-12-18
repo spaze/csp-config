@@ -80,3 +80,38 @@ if ($header) {
     $this->httpResponse->setHeader('Content-Security-Policy', $header);
 }
 ```
+
+### Report-only policy
+Use `policiesReportOnly` configuration key to define policies to use with `Content-Security-Policy-Report-Only` header:
+
+```yaml
+contentSecurityPolicy:
+    policies:
+        *.*:
+            default-src: "'none'"
+    policiesReportOnly:
+        *.*:
+            default-src: "'self'"
+```
+
+Get the policy by calling `getHeaderReportOnly()` method:
+
+```php
+$header = $this->contentSecurityPolicy->getHeaderReportOnly($this->presenterName, $this->actionName);
+if ($header) {
+    $this->httpResponse->setHeader('Content-Security-Policy-Report-Only', $header);
+}
+```
+
+You can send both *enforce* and *report-only* policies which is useful for policy upgrades for example:
+
+```php
+$header = $this->contentSecurityPolicy->getHeader($this->presenterName, $this->actionName);
+if ($header) {
+    $this->httpResponse->setHeader('Content-Security-Policy', $header);
+}
+$header = $this->contentSecurityPolicy->getHeaderReportOnly($this->presenterName, $this->actionName);
+if ($header) {
+    $this->httpResponse->setHeader('Content-Security-Policy-Report-Only', $header);
+}
+```

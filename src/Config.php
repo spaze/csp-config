@@ -3,13 +3,14 @@ declare(strict_types = 1);
 
 namespace Spaze\ContentSecurityPolicy;
 
-use Nette\DI\Config\Helpers;
+use Nette\Schema\Helpers;
 use Spaze\NonceGenerator\GeneratorInterface;
 
 /**
  * ContentSecurityPolicy\Config service.
  *
  * @author Michal Špaček
+ * @phpstan-type PolicyArray array<string, array<string, string|array<int, string>>>
  */
 class Config
 {
@@ -23,10 +24,13 @@ class Config
 	/** @var GeneratorInterface|null */
 	private $nonceGenerator;
 
-	/** @var array<string, array<string, (string|array<int, string>)>> */
+	/** @var PolicyArray */
 	private $policy = [];
 
-	/** @var array<string, array<string, array<int, string>>> */
+	/** @var PolicyArray */
+	private $policyReportOnly = [];
+
+	/** @var PolicyArray */
 	private $snippets = [];
 
 	/** @var array<int, string> */
@@ -43,7 +47,7 @@ class Config
 
 
 	/**
-	 * @param array<string, array<string, (string|array<int, string>)>> $policy
+	 * @param PolicyArray $policy
 	 * @return self
 	 */
 	public function setPolicy(array $policy): self
@@ -56,7 +60,20 @@ class Config
 
 
 	/**
-	 * @param array<string, array<string, array<int, string>>> $snippets
+	 * @param PolicyArray $policy
+	 * @return self
+	 */
+	public function setPolicyReportOnly(array $policy): self
+	{
+		foreach ($policy as $key => $sources) {
+			$this->policyReportOnly[$key] = $sources;
+		}
+		return $this;
+	}
+
+
+	/**
+	 * @param PolicyArray $snippets
 	 * @return self
 	 */
 	public function setSnippets(array $snippets): self
@@ -67,7 +84,7 @@ class Config
 
 
 	/**
-	 * @return array<string, array<string, array<int, string>>>
+	 * @return PolicyArray
 	 */
 	public function getSnippets(): array
 	{
@@ -80,13 +97,34 @@ class Config
 	 */
 	public function getHeader(string $presenter, string $action): string
 	{
+		return $this->getHeaderValue($presenter, $action, $this->policy);
+	}
+
+
+	/**
+	 * Get Content-Security-Policy-Report-Only header value.
+	 */
+	public function getHeaderReportOnly(string $presenter, string $action): string
+	{
+		return $this->getHeaderValue($presenter, $action, $this->policyReportOnly);
+	}
+
+
+	/**
+	 * @param string $presenter
+	 * @param string $action
+	 * @param PolicyArray $policy
+	 * @return string
+	 */
+	private function getHeaderValue(string $presenter, string $action, array $policy): string
+	{
 		$this->directives = [];
 
-		$configKey = $this->findConfigKey($presenter, $action);
-		if (isset($this->policy[$configKey][self::EXTENDS_KEY])) {
-			$currentPolicy = $this->mergeExtends($this->policy[$configKey], $this->policy[$configKey][self::EXTENDS_KEY]);
+		$configKey = $this->findConfigKey($presenter, $action, $policy);
+		if (isset($policy[$configKey][self::EXTENDS_KEY])) {
+			$currentPolicy = $this->mergeExtends($policy[$configKey], $policy[$configKey][self::EXTENDS_KEY], $policy);
 		} else {
-			$currentPolicy = $this->policy[$configKey];
+			$currentPolicy = $policy[$configKey];
 		}
 		foreach ($this->currentSnippets as $snippetName) {
 			foreach ($this->snippets[$snippetName] as $directive => $sources) {
@@ -102,16 +140,17 @@ class Config
 
 
 	/**
-	 * @param array<string, (string|array<int, string>)> $currentPolicy
+	 * @param array<string, string|array<int, string>> $currentPolicy
 	 * @param array<int, string> $parentKeys
+	 * @param PolicyArray $policy
 	 * @return array<string, array<string, string>>
 	 */
-	private function mergeExtends(array $currentPolicy, array $parentKeys): array
+	private function mergeExtends(array $currentPolicy, array $parentKeys, array $policy): array
 	{
 		$parentKey = current($parentKeys);
 		$currentPolicy = (array)Helpers::merge($currentPolicy, $this->policy[$parentKey]);
-		if (isset($this->policy[$parentKey][self::EXTENDS_KEY])) {
-			$currentPolicy = $this->mergeExtends($currentPolicy, $this->policy[$parentKey][self::EXTENDS_KEY]);
+		if (isset($policy[$parentKey][self::EXTENDS_KEY])) {
+			$currentPolicy = $this->mergeExtends($currentPolicy, $policy[$parentKey][self::EXTENDS_KEY], $policy);
 		}
 		unset($currentPolicy[self::EXTENDS_KEY]);
 		return $currentPolicy;
@@ -128,12 +167,18 @@ class Config
 	}
 
 
-	private function findConfigKey(string $presenter, string $action): string
+	/**
+	 * @param string $presenter
+	 * @param string $action
+	 * @param PolicyArray $policy
+	 * @return string
+	 */
+	private function findConfigKey(string $presenter, string $action, array $policy): string
 	{
 		$parts = explode(':', strtolower($presenter));
 		$parts[] = strtolower($action);
 		for ($i = count($parts) - 1; $i >= 0; $i--) {
-			if (isset($this->policy[implode(self::KEY_SEPARATOR, $parts)])) {
+			if (isset($policy[implode(self::KEY_SEPARATOR, $parts)])) {
 				break;
 			}
 			$parts[$i] = self::DEFAULT_KEY;
