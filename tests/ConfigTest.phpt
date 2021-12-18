@@ -3,15 +3,47 @@ declare(strict_types = 1);
 
 namespace Spaze\ContentSecurityPolicy;
 
-use Spaze\ContentSecurityPolicy\Config;
-use Spaze\ContentSecurityPolicy\NonceGeneratorMock;
+use Spaze\NonceGenerator\GeneratorInterface;
 use Tester\Assert;
 use Tester\TestCase;
 
 require __DIR__ . '/../vendor/autoload.php';
 
+/** @testCase */
 class ConfigTest extends TestCase
 {
+
+	/** @var GeneratorInterface */
+	private $nonceGenerator;
+
+
+	public function __construct()
+	{
+		$this->nonceGenerator = new class implements GeneratorInterface {
+
+			/** @var string */
+			private $random;
+
+
+			/**
+			 * @param string $random
+			 * @return GeneratorInterface
+			 */
+			public function setRandom($random): GeneratorInterface
+			{
+				$this->random = $random;
+				return $this;
+			}
+
+
+			public function getNonce(): string
+			{
+				return base64_encode($this->random);
+			}
+
+		};
+	}
+
 
 	public function testGetDefaultKey()
 	{
@@ -151,7 +183,7 @@ class ConfigTest extends TestCase
 	public function testGetHeaderWithNonceDirective()
 	{
 		$random = 'https://xkcd.com/221/';
-		$config = new Config(new NonceGeneratorMock($random));
+		$config = new Config($this->nonceGenerator->setRandom($random));
 		$config->setPolicy([
 			'foo.bar' => [
 				'script-src' => ["'self'", "'nonce'"],
@@ -163,5 +195,4 @@ class ConfigTest extends TestCase
 
 }
 
-$testCase = new ConfigTest();
-$testCase->run();
+(new ConfigTest())->run();
