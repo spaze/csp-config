@@ -22,24 +22,19 @@ class ConfigExtension extends CompilerExtension
 
 	public function getConfigSchema(): Schema
 	{
+		$expectPolicies = Expect::arrayOf(
+			Expect::arrayOf(
+				Expect::anyOf(
+					Expect::listOf(Expect::string()),
+					Expect::string()
+				)->castTo('array')
+			)
+		);
 		return Expect::structure([
 			'supportLegacyBrowsers' => Expect::bool()->default(false),
-			'snippets' => Expect::arrayOf(
-				Expect::arrayOf(
-					Expect::anyOf(
-						Expect::listOf(Expect::string()),
-						Expect::string()
-					)
-				)
-			)->default([]),
-			'policies' => Expect::arrayOf(
-				Expect::arrayOf(
-					Expect::anyOf(
-						Expect::listOf(Expect::string()),
-						Expect::string()
-					)->castTo('array')
-				)
-			)->required(),
+			'snippets' => (clone $expectPolicies)->default([]),
+			'policies' => (clone $expectPolicies)->required(),
+			'policiesReportOnly' => (clone $expectPolicies)->default([]),
 		]);
 	}
 
@@ -51,6 +46,7 @@ class ConfigExtension extends CompilerExtension
 		$cspConfig = $builder->addDefinition($this->prefix('config'))
 			->setClass('Spaze\ContentSecurityPolicy\Config')
 			->addSetup('setPolicy', [$this->config->policies])
+			->addSetup('setPolicyReportOnly', [$this->config->policiesReportOnly])
 			->addSetup('setSnippets', [$this->config->snippets]);
 
 		if ($this->config->supportLegacyBrowsers) {

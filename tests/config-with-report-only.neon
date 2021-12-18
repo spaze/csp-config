@@ -1,0 +1,26 @@
+extensions:
+	contentSecurityPolicy: Spaze\ContentSecurityPolicy\Bridges\Nette\ConfigExtension
+
+contentSecurityPolicy:
+	snippets:
+		ga:
+			img-src:
+				- https://www.google-analytics.com
+	policies:
+		*.*:
+			child-src:
+				- foo
+				- bar
+			style-src:
+				- foo
+				- bar
+			script-src:
+				- foo
+				- bar
+	policiesReportOnly:
+		*.*:
+			form-action:
+				- foobar
+			script-src:
+				- waldo
+				- quux
