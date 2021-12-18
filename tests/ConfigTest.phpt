@@ -27,7 +27,7 @@ class ConfigTest extends TestCase
 			'*.*' => [
 				'default-src' => ["'none'"],
 				'img-src' => ['https://example.com'],
-			]
+			],
 		]);
 		Assert::same("default-src 'none'; img-src https://example.com", $config->getHeader('Foo', 'bar'));
 	}
@@ -40,7 +40,7 @@ class ConfigTest extends TestCase
 			'foo.*' => [
 				'default-src' => ["'none'"],
 				'img-src' => ['https://foo.example.com'],
-			]
+			],
 		]);
 		Assert::same("default-src 'none'; img-src https://foo.example.com", $config->getHeader('Foo', 'bar'));
 	}
@@ -53,7 +53,7 @@ class ConfigTest extends TestCase
 			'foo.bar' => [
 				'default-src' => ["'none'"],
 				'img-src' => ['https://foobar.example.com'],
-			]
+			],
 		]);
 		Assert::same("default-src 'none'; img-src https://foobar.example.com", $config->getHeader('Foo', 'bar'));
 	}
@@ -66,7 +66,7 @@ class ConfigTest extends TestCase
 			'foo.foo.bar' => [
 				'default-src' => ["'none'"],
 				'img-src' => ['https://foobar.example.com'],
-			]
+			],
 		]);
 		Assert::same("default-src 'none'; img-src https://foobar.example.com", $config->getHeader('Foo:Foo', 'bar'));
 	}
@@ -96,13 +96,13 @@ class ConfigTest extends TestCase
 			'foo.*' => [
 				'default-src' => ["'none'"],
 				'img-src' => ['https://foo.example.com'],
-			]
+			],
 		]);
 		$config->setSnippets([
 			'ga' => [
 				'img-src' => ['https://www.google-analytics.com'],
 				'script-src' => ['https://www.google-analytics.com'],
-			]
+			],
 		]);
 		Assert::same("default-src 'none'; img-src https://foo.example.com https://www.google-analytics.com; script-src https://www.google-analytics.com", $config->addSnippet('ga')->getHeader('Foo', 'bar'));
 	}
@@ -111,7 +111,7 @@ class ConfigTest extends TestCase
 	public function testGetHeaderInheritance()
 	{
 		$config = new Config();
-		$config->setPolicy($f=[
+		$config->setPolicy([
 			'*.*' => [
 				'default-src' => ["'self'"],
 				'img-src' => ['https://default.example.com'],
@@ -129,7 +129,7 @@ class ConfigTest extends TestCase
 	public function testGetHeaderDeepInheritance()
 	{
 		$config = new Config();
-		$config->setPolicy($f=[
+		$config->setPolicy([
 			'*.*' => [
 				'default-src' => ["'self'"],
 				'img-src' => ['https://default.example.com'],
@@ -156,7 +156,7 @@ class ConfigTest extends TestCase
 			'foo.bar' => [
 				'script-src' => ["'self'", "'nonce'"],
 				'style-src' => ['https://foobar.example.com'],
-			]
+			],
 		]);
 		Assert::same("script-src 'self' 'nonce-" . base64_encode($random) . "'; style-src https://foobar.example.com", $config->getHeader('Foo', 'bar'));
 	}
