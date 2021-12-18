@@ -3,7 +3,7 @@ declare(strict_types = 1);
 
 namespace Spaze\ContentSecurityPolicy;
 
-use Nette\DI\Config\Helpers;
+use Nette\Schema\Helpers;
 use Spaze\NonceGenerator\GeneratorInterface;
 
 /**
