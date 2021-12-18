@@ -44,7 +44,7 @@ class ConfigExtension extends CompilerExtension
 		$builder = $this->getContainerBuilder();
 
 		$cspConfig = $builder->addDefinition($this->prefix('config'))
-			->setClass('Spaze\ContentSecurityPolicy\Config')
+			->setType('Spaze\ContentSecurityPolicy\Config')
 			->addSetup('setPolicy', [$this->config->policies])
 			->addSetup('setPolicyReportOnly', [$this->config->policiesReportOnly])
 			->addSetup('setSnippets', [$this->config->snippets]);

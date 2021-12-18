@@ -12,6 +12,7 @@
 	"require": {
 		"php": "^7.1 || ^8.0",
 		"nette/di": "^3.0",
+		"nette/schema": "^1.2",
 		"spaze/nonce-generator": "^3.0.2"
 	},
 	"autoload": {
