@@ -16,8 +16,8 @@ use stdClass;
 class ConfigExtension extends CompilerExtension
 {
 
-	/** @var array<string, mixed>|stdClass */
-	protected $config = [];
+	/** @var stdClass */
+	protected $config;
 
 
 	public function getConfigSchema(): Schema

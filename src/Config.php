@@ -10,7 +10,7 @@ use Spaze\NonceGenerator\GeneratorInterface;
  * ContentSecurityPolicy\Config service.
  *
  * @author Michal Špaček
- * @phpstan-type PolicyArray array<string, array<string, string|array<int, string>>>
+ * @phpstan-type PolicyArray array<string, array<string, array<int, string>>>
  */
 class Config
 {
@@ -140,10 +140,10 @@ class Config
 
 
 	/**
-	 * @param array<string, string|array<int, string>> $currentPolicy
+	 * @param array<string, array<int, string>> $currentPolicy
 	 * @param array<int, string> $parentKeys
 	 * @param PolicyArray $policy
-	 * @return array<string, array<string, string>>
+	 * @return array<string, array<int, string>>
 	 */
 	private function mergeExtends(array $currentPolicy, array $parentKeys, array $policy): array
 	{
