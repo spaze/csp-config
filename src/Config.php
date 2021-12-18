@@ -23,13 +23,13 @@ class Config
 	/** @var GeneratorInterface|null */
 	private $nonceGenerator;
 
-	/** @var array<string, array<string, string|array<integer, string>>> */
+	/** @var array<string, array<string, (string|array<int, string>)>> */
 	private $policy = [];
 
-	/** @var array<string, array<string, array<integer, string>>> */
+	/** @var array<string, array<string, array<int, string>>> */
 	private $snippets = [];
 
-	/** @var array<integer, string> */
+	/** @var array<int, string> */
 	private $currentSnippets = [];
 
 	/** @var array<string, string> */
@@ -43,7 +43,7 @@ class Config
 
 
 	/**
-	 * @param array<string, array<string, string|array<integer, string>>> $policy
+	 * @param array<string, array<string, (string|array<int, string>)>> $policy
 	 * @return self
 	 */
 	public function setPolicy(array $policy): self
@@ -56,7 +56,7 @@ class Config
 
 
 	/**
-	 * @param array<string, array<string, array<integer, string>>> $snippets
+	 * @param array<string, array<string, array<int, string>>> $snippets
 	 * @return self
 	 */
 	public function setSnippets(array $snippets): self
@@ -67,7 +67,7 @@ class Config
 
 
 	/**
-	 * @return array<string, array<string, array<integer, string>>>
+	 * @return array<string, array<string, array<int, string>>>
 	 */
 	public function getSnippets(): array
 	{
@@ -102,8 +102,8 @@ class Config
 
 
 	/**
-	 * @param array<string, string|array<integer, string>> $currentPolicy
-	 * @param array<integer, string> $parentKeys
+	 * @param array<string, (string|array<int, string>)> $currentPolicy
+	 * @param array<int, string> $parentKeys
 	 * @return array<string, array<string, string>>
 	 */
 	private function mergeExtends(array $currentPolicy, array $parentKeys): array
@@ -144,7 +144,7 @@ class Config
 
 	/**
 	 * @param string $name
-	 * @param array<integer, string> $sources
+	 * @param array<int, string> $sources
 	 */
 	private function addDirective(string $name, array $sources): void
 	{
