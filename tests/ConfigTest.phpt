@@ -3,15 +3,47 @@ declare(strict_types = 1);
 
 namespace Spaze\ContentSecurityPolicy;
 
-use Spaze\ContentSecurityPolicy\Config;
-use Spaze\ContentSecurityPolicy\NonceGeneratorMock;
+use Spaze\NonceGenerator\GeneratorInterface;
 use Tester\Assert;
 use Tester\TestCase;
 
 require __DIR__ . '/../vendor/autoload.php';
 
+/** @testCase */
 class ConfigTest extends TestCase
 {
+
+	/** @var GeneratorInterface */
+	private $nonceGenerator;
+
+
+	public function __construct()
+	{
+		$this->nonceGenerator = new class implements GeneratorInterface {
+
+			/** @var string */
+			private $random;
+
+
+			/**
+			 * @param string $random
+			 * @return GeneratorInterface
+			 */
+			public function setRandom($random): GeneratorInterface
+			{
+				$this->random = $random;
+				return $this;
+			}
+
+
+			public function getNonce(): string
+			{
+				return base64_encode($this->random);
+			}
+
+		};
+	}
+
 
 	public function testGetDefaultKey()
 	{
@@ -27,7 +59,7 @@ class ConfigTest extends TestCase
 			'*.*' => [
 				'default-src' => ["'none'"],
 				'img-src' => ['https://example.com'],
-			]
+			],
 		]);
 		Assert::same("default-src 'none'; img-src https://example.com", $config->getHeader('Foo', 'bar'));
 	}
@@ -40,7 +72,7 @@ class ConfigTest extends TestCase
 			'foo.*' => [
 				'default-src' => ["'none'"],
 				'img-src' => ['https://foo.example.com'],
-			]
+			],
 		]);
 		Assert::same("default-src 'none'; img-src https://foo.example.com", $config->getHeader('Foo', 'bar'));
 	}
@@ -53,7 +85,7 @@ class ConfigTest extends TestCase
 			'foo.bar' => [
 				'default-src' => ["'none'"],
 				'img-src' => ['https://foobar.example.com'],
-			]
+			],
 		]);
 		Assert::same("default-src 'none'; img-src https://foobar.example.com", $config->getHeader('Foo', 'bar'));
 	}
@@ -66,7 +98,7 @@ class ConfigTest extends TestCase
 			'foo.foo.bar' => [
 				'default-src' => ["'none'"],
 				'img-src' => ['https://foobar.example.com'],
-			]
+			],
 		]);
 		Assert::same("default-src 'none'; img-src https://foobar.example.com", $config->getHeader('Foo:Foo', 'bar'));
 	}
@@ -96,13 +128,13 @@ class ConfigTest extends TestCase
 			'foo.*' => [
 				'default-src' => ["'none'"],
 				'img-src' => ['https://foo.example.com'],
-			]
+			],
 		]);
 		$config->setSnippets([
 			'ga' => [
 				'img-src' => ['https://www.google-analytics.com'],
 				'script-src' => ['https://www.google-analytics.com'],
-			]
+			],
 		]);
 		Assert::same("default-src 'none'; img-src https://foo.example.com https://www.google-analytics.com; script-src https://www.google-analytics.com", $config->addSnippet('ga')->getHeader('Foo', 'bar'));
 	}
@@ -111,7 +143,7 @@ class ConfigTest extends TestCase
 	public function testGetHeaderInheritance()
 	{
 		$config = new Config();
-		$config->setPolicy($f=[
+		$config->setPolicy([
 			'*.*' => [
 				'default-src' => ["'self'"],
 				'img-src' => ['https://default.example.com'],
@@ -129,7 +161,7 @@ class ConfigTest extends TestCase
 	public function testGetHeaderDeepInheritance()
 	{
 		$config = new Config();
-		$config->setPolicy($f=[
+		$config->setPolicy([
 			'*.*' => [
 				'default-src' => ["'self'"],
 				'img-src' => ['https://default.example.com'],
@@ -151,17 +183,16 @@ class ConfigTest extends TestCase
 	public function testGetHeaderWithNonceDirective()
 	{
 		$random = 'https://xkcd.com/221/';
-		$config = new Config(new NonceGeneratorMock($random));
+		$config = new Config($this->nonceGenerator->setRandom($random));
 		$config->setPolicy([
 			'foo.bar' => [
 				'script-src' => ["'self'", "'nonce'"],
 				'style-src' => ['https://foobar.example.com'],
-			]
+			],
 		]);
 		Assert::same("script-src 'self' 'nonce-" . base64_encode($random) . "'; style-src https://foobar.example.com", $config->getHeader('Foo', 'bar'));
 	}
 
 }
 
-$testCase = new ConfigTest();
-$testCase->run();
+(new ConfigTest())->run();

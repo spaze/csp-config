@@ -17,9 +17,6 @@
 	"autoload": {
 		"psr-4": {"Spaze\\ContentSecurityPolicy\\": "src"}
 	},
-	"autoload-dev": {
-		"files": ["tests/NonceGeneratorMock.php"]
-	},
 	"require-dev": {
 		"nette/tester": "^2.0",
 		"nette/bootstrap": "^3.0",

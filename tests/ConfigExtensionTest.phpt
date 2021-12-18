@@ -1,4 +1,5 @@
 <?php
+/** @noinspection PhpUnhandledExceptionInspection */
 declare(strict_types = 1);
 
 namespace Spaze\ContentSecurityPolicy\Bridges\Nette;
@@ -11,12 +12,18 @@ use Tester\TestCase;
 
 require __DIR__ . '/../vendor/autoload.php';
 
+/** @testCase */
 class ConfigExtensionTest extends TestCase
 {
 
-	public $tempDir;
+	/** @var string */
+	public $tempDir = __DIR__ . '/../temp/tests';
 
-	protected function createCspConfig(): CspConfig
+	/** @var CspConfig */
+	private $cspConfig;
+
+
+	protected function setUp(): void
 	{
 		$configurator = new Configurator();
 		$configurator->setTempDirectory($this->tempDir);
@@ -24,31 +31,30 @@ class ConfigExtensionTest extends TestCase
 		$configurator->addConfig(__DIR__ . '/config.neon');
 		$container = $configurator->createContainer();
 
-		$cspConfig = $container->getByType(CspConfig::class);
-		/** @var CspConfig $cspConfig */
-		return $cspConfig;
+		$this->cspConfig = $container->getByType(CspConfig::class);
+	}
+
+
+	protected function tearDown()
+	{
+		Helpers::purge($this->tempDir);
 	}
 
 
 	public function testService(): void
 	{
-		$config = $this->createCspConfig();
-		Assert::type(CspConfig::class, $config);
+		Assert::type(CspConfig::class, $this->cspConfig);
 	}
 
 
 	public function testConfig(): void
 	{
-		$config = $this->createCspConfig();
-		Assert::type(CspConfig::class, $config);
+		Assert::type(CspConfig::class, $this->cspConfig);
 
-		$config->addSnippet('ga');
-		Assert::same("child-src foo bar; style-src foo bar; script-src foo bar; img-src https://www.google-analytics.com", $config->getHeader('Foo', 'bar'));
+		$this->cspConfig->addSnippet('ga');
+		Assert::same("child-src foo bar; style-src foo bar; script-src foo bar; img-src https://www.google-analytics.com", $this->cspConfig->getHeader('Foo', 'bar'));
 	}
 
 }
 
-$testCase = new ConfigExtensionTest();
-$testCase->tempDir = __DIR__ . '/../temp/tests';
-Helpers::purge($testCase->tempDir);
-$testCase->run();
+(new ConfigExtensionTest())->run();
