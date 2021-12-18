@@ -88,6 +88,39 @@ class ConfigTest extends TestCase
 			],
 		]);
 		Assert::same("default-src 'none'; img-src https://foobar.example.com", $config->getHeader('Foo', 'bar'));
+		Assert::same('', $config->getHeaderReportOnly('Foo', 'bar'));
+	}
+
+
+	public function testGetHeaderReportOnly()
+	{
+		$config = new Config();
+		$config->setPolicyReportOnly([
+			'foo.bar' => [
+				'default-src' => ["'none'"],
+			],
+		]);
+		Assert::same('', $config->getHeader('Foo', 'bar'));
+		Assert::same("default-src 'none'", $config->getHeaderReportOnly('Foo', 'bar'));
+	}
+
+
+	public function testGetHeaderBoth()
+	{
+		$config = new Config();
+		$config->setPolicy([
+			'foo.bar' => [
+				'default-src' => ["'none'"],
+				'img-src' => ['https://foobar.example.com'],
+			],
+		]);
+		$config->setPolicyReportOnly([
+			'foo.bar' => [
+				'default-src' => ["'none'"],
+			],
+		]);
+		Assert::same("default-src 'none'; img-src https://foobar.example.com", $config->getHeader('Foo', 'bar'));
+		Assert::same("default-src 'none'", $config->getHeaderReportOnly('Foo', 'bar'));
 	}
 
 

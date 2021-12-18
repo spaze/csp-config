@@ -124,7 +124,7 @@ class Config
 		if (isset($policy[$configKey][self::EXTENDS_KEY])) {
 			$currentPolicy = $this->mergeExtends($policy[$configKey], $policy[$configKey][self::EXTENDS_KEY], $policy);
 		} else {
-			$currentPolicy = $policy[$configKey];
+			$currentPolicy = $policy[$configKey] ?? [];
 		}
 		foreach ($this->currentSnippets as $snippetName) {
 			foreach ($this->snippets[$snippetName] as $directive => $sources) {

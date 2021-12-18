@@ -54,10 +54,19 @@ class ConfigExtensionTest extends TestCase
 
 	public function testConfig(): void
 	{
-		Assert::type(CspConfig::class, $this->cspConfig);
-
 		$this->cspConfig->addSnippet('ga');
-		Assert::same('child-src foo bar; style-src foo bar; script-src foo bar; img-src https://www.google-analytics.com', $this->cspConfig->getHeader('Foo', 'bar'));
+		Assert::noError(function (): void {
+			Assert::same('child-src foo bar; style-src foo bar; script-src foo bar; img-src https://www.google-analytics.com', $this->cspConfig->getHeader('Foo', 'bar'));
+		});
+	}
+
+
+	public function testConfigNoReportOnly(): void
+	{
+		Assert::noError(function (): void {
+			Assert::same('child-src foo bar; style-src foo bar; script-src foo bar', $this->cspConfig->getHeader('Foo', 'bar'));
+			Assert::same('', $this->cspConfig->getHeaderReportOnly('Foo', 'bar'));
+		});
 	}
 
 
@@ -65,8 +74,10 @@ class ConfigExtensionTest extends TestCase
 	{
 		$cspConfig = $this->getService(__DIR__ . '/config-with-report-only.neon');
 		$this->cspConfig->addSnippet('ga');
-		Assert::same('child-src foo bar; style-src foo bar; script-src foo bar', $cspConfig->getHeader('Foo', 'bar'));
-		Assert::same('form-action foobar; script-src waldo quux', $cspConfig->getHeaderReportOnly('Foo', 'bar'));
+		Assert::noError(function () use ($cspConfig): void {
+			Assert::same('child-src foo bar; style-src foo bar; script-src foo bar', $cspConfig->getHeader('Foo', 'bar'));
+			Assert::same('form-action foobar; script-src waldo quux', $cspConfig->getHeaderReportOnly('Foo', 'bar'));
+		});
 	}
 
 }
