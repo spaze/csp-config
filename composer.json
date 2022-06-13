@@ -10,7 +10,7 @@
 		}
 	],
 	"require": {
-		"php": "^7.1 || ^8.0",
+		"php": "^7.2 || ^8.0",
 		"nette/di": "^3.0",
 		"nette/schema": "^1.2",
 		"spaze/nonce-generator": "^3.0.2"
@@ -24,7 +24,7 @@
 		"phpstan/phpstan": "^1.2",
 		"php-parallel-lint/php-parallel-lint": "^1.2",
 		"php-parallel-lint/php-console-highlighter": "^0.5.0",
-		"spaze/coding-standard": "^0.0"
+		"spaze/coding-standard": "^1.0"
 	},
 	"scripts": {
 		"lint": "vendor/bin/parallel-lint --colors src/ tests/",
@@ -41,5 +41,10 @@
 	},
 	"suggest": {
 		"spaze/sri-macros": "For script tags with automatically added nonces, and Subresource Integrity hashes, too"
+	},
+	"config": {
+		"allow-plugins": {
+			"dealerdirect/phpcodesniffer-composer-installer": true
+		}
 	}
 }
