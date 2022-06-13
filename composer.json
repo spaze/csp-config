@@ -41,5 +41,10 @@
 	},
 	"suggest": {
 		"spaze/sri-macros": "For script tags with automatically added nonces, and Subresource Integrity hashes, too"
+	},
+	"config": {
+		"allow-plugins": {
+			"dealerdirect/phpcodesniffer-composer-installer": true
+		}
 	}
 }
