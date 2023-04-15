@@ -21,6 +21,8 @@ class Config
 
 	private const EXTENDS_KEY = '@extends';
 
+	private const OVERRIDE_FLAG = '!';
+
 	/** @var GeneratorInterface|null */
 	private $nonceGenerator;
 
@@ -199,6 +201,9 @@ class Config
 				$source = "'nonce-" . $this->nonceGenerator->getNonce() . "'";
 			}
 			$values .= $source . ' ';
+		}
+		if (isset($name[0]) && $name[0] === self::OVERRIDE_FLAG) {
+			$name = substr($name, 1);
 		}
 		$this->directives[$name] = trim("$name $values");
 	}

@@ -70,7 +70,7 @@ This is where you define your snippets. A snippet consists of one or more Conten
 Your CSP policies go here. The keys below mean `[module.]presenter.action`, wildcards are supported.
   - `*.*` means *use these for all presenters and actions*. As you can see in the example above, I've used quite restrictive policy and will allow more later on.
   - `www.*.*` applies to all presenters and actions in the "www" module.
-  - `@extends: www.*.*` this configuration extends the `www.*.*` configuration, any values specified will be added. Use it to extend the default policy for some pages or actions.
+  - `@extends: www.*.*` this configuration extends the `www.*.*` configuration, any values specified will be added, or merged. Use it to extend the default policy for some pages or actions. You can disable merging by prefixing the directive name with `!`, effectively overwriting the extended values, [see below](#overriding-values). 
 
 - `policiesReportOnly`
 Like `policies` but intended to be used with `Content-Security-Policy-Report-Only` header, see below.
@@ -78,6 +78,36 @@ Like `policies` but intended to be used with `Content-Security-Policy-Report-Onl
 - Policies can contain a few special keys and values:
 - keys with no values, like `upgrade-insecure-requests:` in the example above, will make the policy header contain just the key name and no values
 - `'nonce'` will add a CSP nonce (`'nonce-somethingrandomandunique`') to the header. Nonces were defined in CSP2 and are used in a recommended policy using [CSP3 `'strict-dynamic'`](https://exploited.cz/xss/csp/strict.php). For this to work [spaze/nonce-generator](https://github.com/spaze/nonce-generator) is needed. It will also return the immutable nonce so you can add it to your `<script>` tags. This can be nicely automated with [spaze/sri-macros](https://github.com/spaze/sri-macros).
+
+#### Overriding values
+If you don't want the extended values to be merged with the original values, prefix the directive name in the configuration with an exclamation mark (`!`).
+Consider the following simple example configuration:
+
+```neon
+contentSecurityPolicy:
+    policies:
+        *.*:
+            default-src: "'none'"
+        www.*:
+            @extends: *.*
+            default-src: "'self'"
+```
+
+Calling `getHeader('www', '...')` would then return `default-src 'none' 'self'` which makes no sense and `'none'` would even be ignored.
+
+Change the configuration to this (note the `!` prefix in `default-src`):
+
+```neon
+contentSecurityPolicy:
+    policies:
+        *.*:
+            default-src: "'none'"
+        www.*:
+            @extends: *.*
+            !default-src: "'self'"
+```
+
+Then calling `getHeader('www', '...')` would return `default-src 'self'` which is probably what you'd want in this case.
 
 ### How to send the generated header in Nette Framework
 ```php
