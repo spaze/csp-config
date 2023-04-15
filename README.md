@@ -18,7 +18,7 @@ composer require spaze/csp-config
 ## Nette Framework configuration
 If you're using Nette Framework you can add the extension to your config file:
 
-```yaml
+```neon
 extensions:
     contentSecurityPolicy: Spaze\ContentSecurityPolicy\Bridges\Nette\ConfigExtension
 ```
@@ -27,7 +27,7 @@ extensions:
 
 This is an example configuration, it's here to explain things and it's intentionally incomplete. You can also check [the configuration used for my site](https://github.com/spaze/michalspacek.cz/blob/master/site/app/config/contentsecuritypolicy.neon).
 
-```yaml
+```neon
 contentSecurityPolicy:
     snippets:
         slideshare:
@@ -120,7 +120,7 @@ if ($header) {
 ### Report-only policy
 Use `policiesReportOnly` configuration key to define policies to use with `Content-Security-Policy-Report-Only` header:
 
-```yaml
+```neon
 contentSecurityPolicy:
     policies:
         *.*:
