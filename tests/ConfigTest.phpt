@@ -5,9 +5,11 @@ namespace Spaze\ContentSecurityPolicy;
 
 use Spaze\NonceGenerator\GeneratorInterface;
 use Tester\Assert;
+use Tester\Environment;
 use Tester\TestCase;
 
 require __DIR__ . '/../vendor/autoload.php';
+Environment::setup();
 
 /** @testCase */
 class ConfigTest extends TestCase

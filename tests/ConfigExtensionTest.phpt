@@ -7,10 +7,12 @@ namespace Spaze\ContentSecurityPolicy\Bridges\Nette;
 use Nette\Configurator;
 use Spaze\ContentSecurityPolicy\Config as CspConfig;
 use Tester\Assert;
+use Tester\Environment;
 use Tester\Helpers;
 use Tester\TestCase;
 
 require __DIR__ . '/../vendor/autoload.php';
+Environment::setup();
 
 /** @testCase */
 class ConfigExtensionTest extends TestCase
