@@ -63,6 +63,42 @@ class ConfigExtensionTest extends TestCase
 	}
 
 
+	public function testConfigExtendsOverride(): void
+	{
+		$this->cspConfig->addSnippet('ga');
+		Assert::noError(function (): void {
+			Assert::same("child-src foo bar; style-src foo bar; script-src 'none'; img-src https://www.google-analytics.com", $this->cspConfig->getHeader('Bar', 'foo'));
+		});
+	}
+
+
+	public function testConfigExtendsMerge(): void
+	{
+		$this->cspConfig->addSnippet('ga');
+		Assert::noError(function (): void {
+			Assert::same("child-src foo bar; style-src foo bar; script-src foo bar 'self'; img-src https://www.google-analytics.com", $this->cspConfig->getHeader('Waldo', 'fred'));
+		});
+	}
+
+
+	public function testConfigExtendsSnippetsOverride(): void
+	{
+		$this->cspConfig->addSnippet('ga-override');
+		Assert::noError(function (): void {
+			Assert::same('child-src foo bar; style-src foo bar; script-src foo bar; img-src https://www.google-analytics.com https://ga.example', $this->cspConfig->getHeader('Foobar', 'baz'));
+		});
+	}
+
+
+	public function testConfigExtendsSnippetsMerge(): void
+	{
+		$this->cspConfig->addSnippet('ga');
+		Assert::noError(function (): void {
+			Assert::same('child-src foo bar; style-src foo bar; script-src foo bar; img-src https://example.com https://www.google-analytics.com', $this->cspConfig->getHeader('Foobar', 'baz'));
+		});
+	}
+
+
 	public function testConfigNoReportOnly(): void
 	{
 		Assert::noError(function (): void {

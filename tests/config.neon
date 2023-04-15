@@ -6,6 +6,10 @@ contentSecurityPolicy:
 		ga:
 			img-src:
 				- https://www.google-analytics.com
+		ga-override:
+			!img-src:
+				- https://www.google-analytics.com
+				- https://ga.example
 	policies:
 		*.*:
 			child-src:
@@ -17,3 +21,13 @@ contentSecurityPolicy:
 			script-src:
 				- foo
 				- bar
+		bar.foo:
+			@extends: *.*
+			!script-src: "'none'"
+		waldo.fred:
+			@extends: *.*
+			script-src: "'self'"
+		foobar.baz:
+			@extends: *.*
+			img-src:
+				- https://example.com
