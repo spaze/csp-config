@@ -13,7 +13,7 @@
 		"php": "^8.2",
 		"nette/di": "^3.1",
 		"nette/schema": "^1.2",
-		"spaze/nonce-generator": "^3.1"
+		"spaze/nonce-generator": "^4.0"
 	},
 	"autoload": {
 		"psr-4": {"Spaze\\ContentSecurityPolicy\\": "src"}

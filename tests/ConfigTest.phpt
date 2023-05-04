@@ -3,7 +3,7 @@ declare(strict_types = 1);
 
 namespace Spaze\ContentSecurityPolicy;
 
-use Spaze\NonceGenerator\GeneratorInterface;
+use Spaze\NonceGenerator\Nonce;
 use Tester\Assert;
 use Tester\Environment;
 use Tester\TestCase;
@@ -15,128 +15,105 @@ Environment::setup();
 class ConfigTest extends TestCase
 {
 
-	private GeneratorInterface $nonceGenerator;
+	private const RANDOM = 'https://xkcd.com/221/';
+
+	private Config $config;
 
 
-	public function __construct()
+	protected function setUp(): void
 	{
-		$this->nonceGenerator = new class implements GeneratorInterface {
-
-			private string $random;
-
-
-			public function setRandom(string $random): GeneratorInterface
-			{
-				$this->random = $random;
-				return $this;
-			}
-
-
-			public function getNonce(): string
-			{
-				return base64_encode($this->random);
-			}
-
-		};
+		$this->config = new Config(new Nonce(self::RANDOM));
 	}
 
 
 	public function testGetDefaultKey(): void
 	{
-		$config = new Config();
-		Assert::same('*', $config->getDefaultKey());
+		Assert::same('*', $this->config->getDefaultKey());
 	}
 
 
 	public function testGetHeaderDefaultKeys(): void
 	{
-		$config = new Config();
-		$config->setPolicy([
+		$this->config->setPolicy([
 			'*.*' => [
 				'default-src' => ["'none'"],
 				'img-src' => ['https://example.com'],
 			],
 		]);
-		Assert::same("default-src 'none'; img-src https://example.com", $config->getHeader('Foo', 'bar'));
+		Assert::same("default-src 'none'; img-src https://example.com", $this->config->getHeader('Foo', 'bar'));
 	}
 
 
 	public function testGetHeaderDefaultAction(): void
 	{
-		$config = new Config();
-		$config->setPolicy([
+		$this->config->setPolicy([
 			'foo.*' => [
 				'default-src' => ["'none'"],
 				'img-src' => ['https://foo.example.com'],
 			],
 		]);
-		Assert::same("default-src 'none'; img-src https://foo.example.com", $config->getHeader('Foo', 'bar'));
+		Assert::same("default-src 'none'; img-src https://foo.example.com", $this->config->getHeader('Foo', 'bar'));
 	}
 
 
 	public function testGetHeader(): void
 	{
-		$config = new Config();
-		$config->setPolicy([
+		$this->config->setPolicy([
 			'foo.bar' => [
 				'default-src' => ["'none'"],
 				'img-src' => ['https://foobar.example.com'],
 			],
 		]);
-		Assert::same("default-src 'none'; img-src https://foobar.example.com", $config->getHeader('Foo', 'bar'));
-		Assert::same('', $config->getHeaderReportOnly('Foo', 'bar'));
+		Assert::same("default-src 'none'; img-src https://foobar.example.com", $this->config->getHeader('Foo', 'bar'));
+		Assert::same('', $this->config->getHeaderReportOnly('Foo', 'bar'));
 	}
 
 
 	public function testGetHeaderReportOnly(): void
 	{
-		$config = new Config();
-		$config->setPolicyReportOnly([
+		$this->config->setPolicyReportOnly([
 			'foo.bar' => [
 				'default-src' => ["'none'"],
 			],
 		]);
-		Assert::same('', $config->getHeader('Foo', 'bar'));
-		Assert::same("default-src 'none'", $config->getHeaderReportOnly('Foo', 'bar'));
+		Assert::same('', $this->config->getHeader('Foo', 'bar'));
+		Assert::same("default-src 'none'", $this->config->getHeaderReportOnly('Foo', 'bar'));
 	}
 
 
 	public function testGetHeaderBoth(): void
 	{
-		$config = new Config();
-		$config->setPolicy([
+		$this->config->setPolicy([
 			'foo.bar' => [
 				'default-src' => ["'none'"],
 				'img-src' => ['https://foobar.example.com'],
 			],
 		]);
-		$config->setPolicyReportOnly([
+		$this->config->setPolicyReportOnly([
 			'foo.bar' => [
 				'default-src' => ["'none'"],
 			],
 		]);
-		Assert::same("default-src 'none'; img-src https://foobar.example.com", $config->getHeader('Foo', 'bar'));
-		Assert::same("default-src 'none'", $config->getHeaderReportOnly('Foo', 'bar'));
+		Assert::same("default-src 'none'; img-src https://foobar.example.com", $this->config->getHeader('Foo', 'bar'));
+		Assert::same("default-src 'none'", $this->config->getHeaderReportOnly('Foo', 'bar'));
 	}
 
 
 	public function testGetHeaderModule(): void
 	{
-		$config = new Config();
-		$config->setPolicy([
+		$this->config->setPolicy([
 			'foo.foo.bar' => [
 				'default-src' => ["'none'"],
 				'img-src' => ['https://foobar.example.com'],
 			],
 		]);
-		Assert::same("default-src 'none'; img-src https://foobar.example.com", $config->getHeader('Foo:Foo', 'bar'));
+		Assert::same("default-src 'none'; img-src https://foobar.example.com", $this->config->getHeader('Foo:Foo', 'bar'));
 	}
 
 
 	public function testGetHeaderDefaultModule(): void
 	{
-		$config = new Config();
-		$config->setPolicy([
+		$this->config->setPolicy([
 			'*.*.*' => [
 				'default-src' => ["'none'"],
 				'img-src' => ['https://default.example.com'],
@@ -146,33 +123,31 @@ class ConfigTest extends TestCase
 				'img-src' => 'https://foobar.example.com',
 			],
 		]);
-		Assert::same("default-src 'none'; img-src https://default.example.com", $config->getHeader('Waldo:Foo', 'bar'));
+		Assert::same("default-src 'none'; img-src https://default.example.com", $this->config->getHeader('Waldo:Foo', 'bar'));
 	}
 
 
 	public function testGetHeaderDefaultActionWithSnippets(): void
 	{
-		$config = new Config();
-		$config->setPolicy([
+		$this->config->setPolicy([
 			'foo.*' => [
 				'default-src' => ["'none'"],
 				'img-src' => ['https://foo.example.com'],
 			],
 		]);
-		$config->setSnippets([
+		$this->config->setSnippets([
 			'ga' => [
 				'img-src' => ['https://www.google-analytics.com'],
 				'script-src' => ['https://www.google-analytics.com'],
 			],
 		]);
-		Assert::same("default-src 'none'; img-src https://foo.example.com https://www.google-analytics.com; script-src https://www.google-analytics.com", $config->addSnippet('ga')->getHeader('Foo', 'bar'));
+		Assert::same("default-src 'none'; img-src https://foo.example.com https://www.google-analytics.com; script-src https://www.google-analytics.com", $this->config->addSnippet('ga')->getHeader('Foo', 'bar'));
 	}
 
 
 	public function testGetHeaderInheritance(): void
 	{
-		$config = new Config();
-		$config->setPolicy([
+		$this->config->setPolicy([
 			'*.*' => [
 				'default-src' => ["'self'"],
 				'img-src' => ['https://default.example.com'],
@@ -183,14 +158,13 @@ class ConfigTest extends TestCase
 				'img-src' => ['https://extends.example.com'],
 			],
 		]);
-		Assert::same("default-src 'self' https://extends.example.com; img-src https://default.example.com https://extends.example.com", $config->getHeader('Foo', 'bar'));
+		Assert::same("default-src 'self' https://extends.example.com; img-src https://default.example.com https://extends.example.com", $this->config->getHeader('Foo', 'bar'));
 	}
 
 
 	public function testGetHeaderDeepInheritance(): void
 	{
-		$config = new Config();
-		$config->setPolicy([
+		$this->config->setPolicy([
 			'*.*' => [
 				'default-src' => ["'self'"],
 				'img-src' => ['https://default.example.com'],
@@ -205,21 +179,19 @@ class ConfigTest extends TestCase
 				'connect-src' => ['https://extends.example.com'],
 			],
 		]);
-		Assert::same("default-src 'self' https://extends.example.com; img-src https://default.example.com https://extends.example.com; connect-src https://extends.example.com", $config->getHeader('Bar', 'baz'));
+		Assert::same("default-src 'self' https://extends.example.com; img-src https://default.example.com https://extends.example.com; connect-src https://extends.example.com", $this->config->getHeader('Bar', 'baz'));
 	}
 
 
 	public function testGetHeaderWithNonceDirective(): void
 	{
-		$random = 'https://xkcd.com/221/';
-		$config = new Config($this->nonceGenerator->setRandom($random));
-		$config->setPolicy([
+		$this->config->setPolicy([
 			'foo.bar' => [
 				'script-src' => ["'self'", "'nonce'"],
 				'style-src' => ['https://foobar.example.com'],
 			],
 		]);
-		Assert::same("script-src 'self' 'nonce-" . base64_encode($random) . "'; style-src https://foobar.example.com", $config->getHeader('Foo', 'bar'));
+		Assert::same("script-src 'self' 'nonce-" . self::RANDOM . "'; style-src https://foobar.example.com", $this->config->getHeader('Foo', 'bar'));
 	}
 
 }
