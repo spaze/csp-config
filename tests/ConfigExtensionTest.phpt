@@ -4,7 +4,7 @@ declare(strict_types = 1);
 
 namespace Spaze\ContentSecurityPolicy\Bridges\Nette;
 
-use Nette\Configurator;
+use Nette\Bootstrap\Configurator;
 use Spaze\ContentSecurityPolicy\Config as CspConfig;
 use Tester\Assert;
 use Tester\Environment;
@@ -32,7 +32,7 @@ class ConfigExtensionTest extends TestCase
 	{
 		$configurator = new Configurator();
 		$configurator->setTempDirectory($this->tempDir);
-		$configurator->addParameters(['appDir' => __DIR__]);
+		$configurator->addStaticParameters(['appDir' => __DIR__]);
 		$configurator->addConfig($config);
 		$container = $configurator->createContainer();
 		return $container->getByType(CspConfig::class);
