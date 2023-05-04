@@ -15,23 +15,17 @@ Environment::setup();
 class ConfigTest extends TestCase
 {
 
-	/** @var GeneratorInterface */
-	private $nonceGenerator;
+	private GeneratorInterface $nonceGenerator;
 
 
 	public function __construct()
 	{
 		$this->nonceGenerator = new class implements GeneratorInterface {
 
-			/** @var string */
-			private $random;
+			private string $random;
 
 
-			/**
-			 * @param string $random
-			 * @return GeneratorInterface
-			 */
-			public function setRandom($random): GeneratorInterface
+			public function setRandom(string $random): GeneratorInterface
 			{
 				$this->random = $random;
 				return $this;
@@ -47,14 +41,14 @@ class ConfigTest extends TestCase
 	}
 
 
-	public function testGetDefaultKey()
+	public function testGetDefaultKey(): void
 	{
 		$config = new Config();
 		Assert::same('*', $config->getDefaultKey());
 	}
 
 
-	public function testGetHeaderDefaultKeys()
+	public function testGetHeaderDefaultKeys(): void
 	{
 		$config = new Config();
 		$config->setPolicy([
@@ -67,7 +61,7 @@ class ConfigTest extends TestCase
 	}
 
 
-	public function testGetHeaderDefaultAction()
+	public function testGetHeaderDefaultAction(): void
 	{
 		$config = new Config();
 		$config->setPolicy([
@@ -80,7 +74,7 @@ class ConfigTest extends TestCase
 	}
 
 
-	public function testGetHeader()
+	public function testGetHeader(): void
 	{
 		$config = new Config();
 		$config->setPolicy([
@@ -94,7 +88,7 @@ class ConfigTest extends TestCase
 	}
 
 
-	public function testGetHeaderReportOnly()
+	public function testGetHeaderReportOnly(): void
 	{
 		$config = new Config();
 		$config->setPolicyReportOnly([
@@ -107,7 +101,7 @@ class ConfigTest extends TestCase
 	}
 
 
-	public function testGetHeaderBoth()
+	public function testGetHeaderBoth(): void
 	{
 		$config = new Config();
 		$config->setPolicy([
@@ -126,7 +120,7 @@ class ConfigTest extends TestCase
 	}
 
 
-	public function testGetHeaderModule()
+	public function testGetHeaderModule(): void
 	{
 		$config = new Config();
 		$config->setPolicy([
@@ -139,7 +133,7 @@ class ConfigTest extends TestCase
 	}
 
 
-	public function testGetHeaderDefaultModule()
+	public function testGetHeaderDefaultModule(): void
 	{
 		$config = new Config();
 		$config->setPolicy([
@@ -156,7 +150,7 @@ class ConfigTest extends TestCase
 	}
 
 
-	public function testGetHeaderDefaultActionWithSnippets()
+	public function testGetHeaderDefaultActionWithSnippets(): void
 	{
 		$config = new Config();
 		$config->setPolicy([
@@ -175,7 +169,7 @@ class ConfigTest extends TestCase
 	}
 
 
-	public function testGetHeaderInheritance()
+	public function testGetHeaderInheritance(): void
 	{
 		$config = new Config();
 		$config->setPolicy([
@@ -193,7 +187,7 @@ class ConfigTest extends TestCase
 	}
 
 
-	public function testGetHeaderDeepInheritance()
+	public function testGetHeaderDeepInheritance(): void
 	{
 		$config = new Config();
 		$config->setPolicy([
@@ -215,7 +209,7 @@ class ConfigTest extends TestCase
 	}
 
 
-	public function testGetHeaderWithNonceDirective()
+	public function testGetHeaderWithNonceDirective(): void
 	{
 		$random = 'https://xkcd.com/221/';
 		$config = new Config($this->nonceGenerator->setRandom($random));

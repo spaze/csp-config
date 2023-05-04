@@ -18,11 +18,8 @@ Environment::setup();
 class ConfigExtensionTest extends TestCase
 {
 
-	/** @var string */
-	public $tempDir = __DIR__ . '/../temp/tests';
-
-	/** @var CspConfig */
-	private $cspConfig;
+	public string $tempDir = __DIR__ . '/../temp/tests';
+	private CspConfig $cspConfig;
 
 
 	protected function setUp(): void
@@ -42,7 +39,7 @@ class ConfigExtensionTest extends TestCase
 	}
 
 
-	protected function tearDown()
+	protected function tearDown(): void
 	{
 		Helpers::purge($this->tempDir);
 	}

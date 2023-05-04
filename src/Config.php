@@ -7,9 +7,6 @@ use Nette\Schema\Helpers;
 use Spaze\NonceGenerator\GeneratorInterface;
 
 /**
- * ContentSecurityPolicy\Config service.
- *
- * @author Michal Špaček
  * @phpstan-type PolicyArray array<string, array<string, array<int, string>>>
  */
 class Config
@@ -23,34 +20,30 @@ class Config
 
 	private const OVERRIDE_FLAG = '!';
 
-	/** @var GeneratorInterface|null */
-	private $nonceGenerator;
+	/** @phpstan-var PolicyArray */
+	private array $policy = [];
 
-	/** @var PolicyArray */
-	private $policy = [];
+	/** @phpstan-var PolicyArray */
+	private array $policyReportOnly = [];
 
-	/** @var PolicyArray */
-	private $policyReportOnly = [];
-
-	/** @var PolicyArray */
-	private $snippets = [];
+	/** @phpstan-var PolicyArray */
+	private array $snippets = [];
 
 	/** @var array<int, string> */
-	private $currentSnippets = [];
+	private array $currentSnippets = [];
 
 	/** @var array<string, string> */
-	private $directives = [];
+	private array $directives = [];
 
 
-	public function __construct(GeneratorInterface $generator = null)
-	{
-		$this->nonceGenerator = $generator;
+	public function __construct(
+		private readonly ?GeneratorInterface $nonceGenerator = null,
+	) {
 	}
 
 
 	/**
-	 * @param PolicyArray $policy
-	 * @return self
+	 * @phpstan-param PolicyArray $policy
 	 */
 	public function setPolicy(array $policy): self
 	{
@@ -62,8 +55,7 @@ class Config
 
 
 	/**
-	 * @param PolicyArray $policy
-	 * @return self
+	 * @phpstan-param PolicyArray $policy
 	 */
 	public function setPolicyReportOnly(array $policy): self
 	{
@@ -75,8 +67,7 @@ class Config
 
 
 	/**
-	 * @param PolicyArray $snippets
-	 * @return self
+	 * @phpstan-param PolicyArray $snippets
 	 */
 	public function setSnippets(array $snippets): self
 	{
@@ -86,7 +77,7 @@ class Config
 
 
 	/**
-	 * @return PolicyArray
+	 * @phpstan-return PolicyArray
 	 */
 	public function getSnippets(): array
 	{
@@ -113,10 +104,7 @@ class Config
 
 
 	/**
-	 * @param string $presenter
-	 * @param string $action
-	 * @param PolicyArray $policy
-	 * @return string
+	 * @phpstan-param PolicyArray $policy
 	 */
 	private function getHeaderValue(string $presenter, string $action, array $policy): string
 	{
@@ -144,7 +132,7 @@ class Config
 	/**
 	 * @param array<string, array<int, string>> $currentPolicy
 	 * @param array<int, string> $parentKeys
-	 * @param PolicyArray $policy
+	 * @phpstan-param PolicyArray $policy
 	 * @return array<string, array<int, string>>
 	 */
 	private function mergeExtends(array $currentPolicy, array $parentKeys, array $policy): array
@@ -170,10 +158,7 @@ class Config
 
 
 	/**
-	 * @param string $presenter
-	 * @param string $action
-	 * @param PolicyArray $policy
-	 * @return string
+	 * @phpstan-param PolicyArray $policy
 	 */
 	private function findConfigKey(string $presenter, string $action, array $policy): string
 	{
@@ -190,7 +175,6 @@ class Config
 
 
 	/**
-	 * @param string $name
 	 * @param array<int, string> $sources
 	 */
 	private function addDirective(string $name, array $sources): void

@@ -8,11 +8,6 @@ use Nette\Schema\Expect;
 use Nette\Schema\Schema;
 use stdClass;
 
-/**
- * ContentSecurityPolicy\Config extension.
- *
- * @author Michal Špaček
- */
 class ConfigExtension extends CompilerExtension
 {
 
