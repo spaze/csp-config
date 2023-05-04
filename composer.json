@@ -10,21 +10,21 @@
 		}
 	],
 	"require": {
-		"php": "^7.2 || ^8.0",
-		"nette/di": "^3.0",
+		"php": "^8.2",
+		"nette/di": "^3.1",
 		"nette/schema": "^1.2",
-		"spaze/nonce-generator": "^3.0.2"
+		"spaze/nonce-generator": "^3.1"
 	},
 	"autoload": {
 		"psr-4": {"Spaze\\ContentSecurityPolicy\\": "src"}
 	},
 	"require-dev": {
-		"nette/tester": "^2.0",
-		"nette/bootstrap": "^3.0",
-		"phpstan/phpstan": "^1.2",
-		"php-parallel-lint/php-parallel-lint": "^1.2",
+		"nette/tester": "^2.5",
+		"nette/bootstrap": "^3.2",
+		"phpstan/phpstan": "^1.10",
+		"php-parallel-lint/php-parallel-lint": "^1.3",
 		"php-parallel-lint/php-console-highlighter": "^1.0",
-		"spaze/coding-standard": "^1.0"
+		"spaze/coding-standard": "^1.6"
 	},
 	"scripts": {
 		"lint": "vendor/bin/parallel-lint --colors src/ tests/",
