@@ -4,7 +4,7 @@ declare(strict_types = 1);
 namespace Spaze\ContentSecurityPolicy;
 
 use Nette\Schema\Helpers;
-use Spaze\NonceGenerator\GeneratorInterface;
+use Spaze\NonceGenerator\Nonce;
 
 /**
  * @phpstan-type PolicyArray array<string, array<string, array<int, string>>>
@@ -37,7 +37,7 @@ class Config
 
 
 	public function __construct(
-		private readonly ?GeneratorInterface $nonceGenerator = null,
+		private readonly Nonce $nonce,
 	) {
 	}
 
@@ -181,8 +181,8 @@ class Config
 	{
 		$values = '';
 		foreach ($sources as $source) {
-			if ($source === "'nonce'" && $this->nonceGenerator) {
-				$source = "'nonce-" . $this->nonceGenerator->getNonce() . "'";
+			if ($source === "'nonce'") {
+				$source = "'nonce-" . $this->nonce->getValue() . "'";
 			}
 			$values .= $source . ' ';
 		}
