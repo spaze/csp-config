@@ -4,7 +4,7 @@ declare(strict_types = 1);
 
 namespace Spaze\ContentSecurityPolicy\Bridges\Nette;
 
-use Nette\Configurator;
+use Nette\Bootstrap\Configurator;
 use Spaze\ContentSecurityPolicy\Config as CspConfig;
 use Tester\Assert;
 use Tester\Environment;
@@ -18,11 +18,8 @@ Environment::setup();
 class ConfigExtensionTest extends TestCase
 {
 
-	/** @var string */
-	public $tempDir = __DIR__ . '/../temp/tests';
-
-	/** @var CspConfig */
-	private $cspConfig;
+	public string $tempDir = __DIR__ . '/../temp/tests';
+	private CspConfig $cspConfig;
 
 
 	protected function setUp(): void
@@ -35,14 +32,14 @@ class ConfigExtensionTest extends TestCase
 	{
 		$configurator = new Configurator();
 		$configurator->setTempDirectory($this->tempDir);
-		$configurator->addParameters(['appDir' => __DIR__]);
+		$configurator->addStaticParameters(['appDir' => __DIR__]);
 		$configurator->addConfig($config);
 		$container = $configurator->createContainer();
 		return $container->getByType(CspConfig::class);
 	}
 
 
-	protected function tearDown()
+	protected function tearDown(): void
 	{
 		Helpers::purge($this->tempDir);
 	}
