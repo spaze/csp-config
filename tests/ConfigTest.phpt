@@ -28,7 +28,7 @@ class ConfigTest extends TestCase
 
 	public function testGetDefaultKey(): void
 	{
-		Assert::same('*', $this->config->getDefaultKey());
+		Assert::same('*:*', $this->config->getDefaultKey());
 	}
 
 
@@ -40,7 +40,7 @@ class ConfigTest extends TestCase
 				'img-src' => ['https://example.com'],
 			],
 		]);
-		Assert::same("default-src 'none'; img-src https://example.com", $this->config->getHeader('Foo', 'bar'));
+		Assert::same("default-src 'none'; img-src https://example.com", $this->config->getHeader(':Foo:bar'));
 	}
 
 
@@ -52,7 +52,7 @@ class ConfigTest extends TestCase
 				'img-src' => ['https://foo.example.com'],
 			],
 		]);
-		Assert::same("default-src 'none'; img-src https://foo.example.com", $this->config->getHeader('Foo', 'bar'));
+		Assert::same("default-src 'none'; img-src https://foo.example.com", $this->config->getHeader('Foo:bar'));
 	}
 
 
@@ -64,7 +64,7 @@ class ConfigTest extends TestCase
 				'img-src' => ['https://foobar.example.com'],
 			],
 		]);
-		Assert::same("default-src 'none'; img-src https://foobar.example.com", $this->config->getHeader('Foo', 'bar'));
+		Assert::same("default-src 'none'; img-src https://foobar.example.com", $this->config->getHeader(':Foo:bar:'));
 		Assert::same('', $this->config->getHeaderReportOnly('Foo', 'bar'));
 	}
 
@@ -77,7 +77,7 @@ class ConfigTest extends TestCase
 			],
 		]);
 		Assert::same('', $this->config->getHeader('Foo', 'bar'));
-		Assert::same("default-src 'none'", $this->config->getHeaderReportOnly('Foo', 'bar'));
+		Assert::same("default-src 'none'", $this->config->getHeaderReportOnly(':Foo:bar'));
 	}
 
 
@@ -94,8 +94,8 @@ class ConfigTest extends TestCase
 				'default-src' => ["'none'"],
 			],
 		]);
-		Assert::same("default-src 'none'; img-src https://foobar.example.com", $this->config->getHeader('Foo', 'bar'));
-		Assert::same("default-src 'none'", $this->config->getHeaderReportOnly('Foo', 'bar'));
+		Assert::same("default-src 'none'; img-src https://foobar.example.com", $this->config->getHeader('Foo:bar:'));
+		Assert::same("default-src 'none'", $this->config->getHeaderReportOnly(':Foo:bar'));
 	}
 
 
@@ -107,7 +107,7 @@ class ConfigTest extends TestCase
 				'img-src' => ['https://foobar.example.com'],
 			],
 		]);
-		Assert::same("default-src 'none'; img-src https://foobar.example.com", $this->config->getHeader('Foo:Foo', 'bar'));
+		Assert::same("default-src 'none'; img-src https://foobar.example.com", $this->config->getHeader(':Foo:Foo:bar'));
 	}
 
 
@@ -123,7 +123,7 @@ class ConfigTest extends TestCase
 				'img-src' => 'https://foobar.example.com',
 			],
 		]);
-		Assert::same("default-src 'none'; img-src https://default.example.com", $this->config->getHeader('Waldo:Foo', 'bar'));
+		Assert::same("default-src 'none'; img-src https://default.example.com", $this->config->getHeader(':Waldo:Foo:bar'));
 	}
 
 
@@ -141,7 +141,7 @@ class ConfigTest extends TestCase
 				'script-src' => ['https://www.google-analytics.com'],
 			],
 		]);
-		Assert::same("default-src 'none'; img-src https://foo.example.com https://www.google-analytics.com; script-src https://www.google-analytics.com", $this->config->addSnippet('ga')->getHeader('Foo', 'bar'));
+		Assert::same("default-src 'none'; img-src https://foo.example.com https://www.google-analytics.com; script-src https://www.google-analytics.com", $this->config->addSnippet('ga')->getHeader(':Foo:bar'));
 	}
 
 
@@ -158,7 +158,7 @@ class ConfigTest extends TestCase
 				'img-src' => ['https://extends.example.com'],
 			],
 		]);
-		Assert::same("default-src 'self' https://extends.example.com; img-src https://default.example.com https://extends.example.com", $this->config->getHeader('Foo', 'bar'));
+		Assert::same("default-src 'self' https://extends.example.com; img-src https://default.example.com https://extends.example.com", $this->config->getHeader(':Foo:bar'));
 	}
 
 
@@ -179,7 +179,7 @@ class ConfigTest extends TestCase
 				'connect-src' => ['https://extends.example.com'],
 			],
 		]);
-		Assert::same("default-src 'self' https://extends.example.com; img-src https://default.example.com https://extends.example.com; connect-src https://extends.example.com", $this->config->getHeader('Bar', 'baz'));
+		Assert::same("default-src 'self' https://extends.example.com; img-src https://default.example.com https://extends.example.com; connect-src https://extends.example.com", $this->config->getHeader(':Bar:baz'));
 	}
 
 
@@ -191,7 +191,7 @@ class ConfigTest extends TestCase
 				'style-src' => ['https://foobar.example.com'],
 			],
 		]);
-		Assert::same("script-src 'self' 'nonce-" . self::RANDOM . "'; style-src https://foobar.example.com", $this->config->getHeader('Foo', 'bar'));
+		Assert::same("script-src 'self' 'nonce-" . self::RANDOM . "'; style-src https://foobar.example.com", $this->config->getHeader(':Foo:bar'));
 	}
 
 }

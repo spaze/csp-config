@@ -88,29 +88,29 @@ class Config
 	/**
 	 * Get Content-Security-Policy header value.
 	 */
-	public function getHeader(string $presenter, string $action): string
+	public function getHeader(string $fullyQualifiedAction): string
 	{
-		return $this->getHeaderValue($presenter, $action, $this->policy);
+		return $this->getHeaderValue($fullyQualifiedAction, $this->policy);
 	}
 
 
 	/**
 	 * Get Content-Security-Policy-Report-Only header value.
 	 */
-	public function getHeaderReportOnly(string $presenter, string $action): string
+	public function getHeaderReportOnly(string $fullyQualifiedAction): string
 	{
-		return $this->getHeaderValue($presenter, $action, $this->policyReportOnly);
+		return $this->getHeaderValue($fullyQualifiedAction, $this->policyReportOnly);
 	}
 
 
 	/**
 	 * @phpstan-param PolicyArray $policy
 	 */
-	private function getHeaderValue(string $presenter, string $action, array $policy): string
+	private function getHeaderValue(string $fullyQualifiedAction, array $policy): string
 	{
 		$this->directives = [];
 
-		$configKey = $this->findConfigKey($presenter, $action, $policy);
+		$configKey = $this->findConfigKey($fullyQualifiedAction, $policy);
 		if (isset($policy[$configKey][self::EXTENDS_KEY])) {
 			$currentPolicy = $this->mergeExtends($policy[$configKey], $policy[$configKey][self::EXTENDS_KEY], $policy);
 		} else {
@@ -160,10 +160,9 @@ class Config
 	/**
 	 * @phpstan-param PolicyArray $policy
 	 */
-	private function findConfigKey(string $presenter, string $action, array $policy): string
+	private function findConfigKey(string $fullyQualifiedAction, array $policy): string
 	{
-		$parts = explode(':', strtolower($presenter));
-		$parts[] = strtolower($action);
+		$parts = explode(':', strtolower(trim($fullyQualifiedAction, ':')));
 		for ($i = count($parts) - 1; $i >= 0; $i--) {
 			if (isset($policy[implode(self::KEY_SEPARATOR, $parts)])) {
 				break;
@@ -198,7 +197,7 @@ class Config
 	 */
 	public function getDefaultKey(): string
 	{
-		return self::DEFAULT_KEY;
+		return self::DEFAULT_KEY . ':' . self::DEFAULT_KEY;
 	}
 
 }
