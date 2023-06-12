@@ -9,7 +9,7 @@ use Spaze\NonceGenerator\Nonce;
 /**
  * @phpstan-type PolicyArray array<string, array<string, array<int, string>>>
  */
-class Config
+class CspConfig
 {
 
 	private const DEFAULT_KEY = '*';

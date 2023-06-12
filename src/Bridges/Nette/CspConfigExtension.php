@@ -8,7 +8,7 @@ use Nette\Schema\Expect;
 use Nette\Schema\Schema;
 use stdClass;
 
-class ConfigExtension extends CompilerExtension
+class CspConfigExtension extends CompilerExtension
 {
 
 	/** @var stdClass */
@@ -36,7 +36,7 @@ class ConfigExtension extends CompilerExtension
 	public function loadConfiguration(): void
 	{
 		$this->getContainerBuilder()->addDefinition($this->prefix('config'))
-			->setType('Spaze\ContentSecurityPolicy\Config')
+			->setType('Spaze\ContentSecurityPolicy\CspConfig')
 			->addSetup('setPolicy', [$this->config->policies])
 			->addSetup('setPolicyReportOnly', [$this->config->policiesReportOnly])
 			->addSetup('setSnippets', [$this->config->snippets]);

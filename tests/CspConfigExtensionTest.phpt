@@ -5,7 +5,7 @@ declare(strict_types = 1);
 namespace Spaze\ContentSecurityPolicy\Bridges\Nette;
 
 use Nette\Bootstrap\Configurator;
-use Spaze\ContentSecurityPolicy\Config as CspConfig;
+use Spaze\ContentSecurityPolicy\CspConfig;
 use Tester\Assert;
 use Tester\Environment;
 use Tester\Helpers;
@@ -15,7 +15,7 @@ require __DIR__ . '/../vendor/autoload.php';
 Environment::setup();
 
 /** @testCase */
-class ConfigExtensionTest extends TestCase
+class CspConfigExtensionTest extends TestCase
 {
 
 	public string $tempDir = __DIR__ . '/../temp/tests';
@@ -117,4 +117,4 @@ class ConfigExtensionTest extends TestCase
 
 }
 
-(new ConfigExtensionTest())->run();
+(new CspConfigExtensionTest())->run();

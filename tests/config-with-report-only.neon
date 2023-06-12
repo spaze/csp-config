@@ -1,5 +1,5 @@
 extensions:
-	contentSecurityPolicy: Spaze\ContentSecurityPolicy\Bridges\Nette\ConfigExtension
+	contentSecurityPolicy: Spaze\ContentSecurityPolicy\Bridges\Nette\CspConfigExtension
 	nonceGenerator: Spaze\NonceGenerator\Bridges\Nette\GeneratorExtension
 
 contentSecurityPolicy:
