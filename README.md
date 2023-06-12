@@ -93,7 +93,7 @@ contentSecurityPolicy:
             default-src: "'self'"
 ```
 
-Calling `getHeader('www', '...')` would then return `default-src 'none' 'self'` which makes no sense and `'none'` would even be ignored.
+Calling `getHeader('www:...')` would then return `default-src 'none' 'self'` which makes no sense and `'none'` would even be ignored.
 
 Change the configuration to this (note the `!` prefix in `default-src`):
 
@@ -107,15 +107,32 @@ contentSecurityPolicy:
             !default-src: "'self'"
 ```
 
-Then calling `getHeader('www', '...')` would return `default-src 'self'` which is probably what you'd want in this case.
+Then calling `getHeader('www:...')` would return `default-src 'self'` which is probably what you'd want in this case.
 
 ### How to send the generated header in Nette Framework
 ```php
-$header = $this->contentSecurityPolicy->getHeader($this->presenterName, $this->actionName);
+$header = $this->contentSecurityPolicy->getHeader($presenter->getAction(true));
 if ($header) {
     $this->httpResponse->setHeader('Content-Security-Policy', $header);
 }
 ```
+
+You can get `$presenter` from `\Nette\Application\Application` like this for example:
+
+```php
+/** @var \Nette\Application\UI\Presenter $presenter */
+$presenter = $this->application->getPresenter();
+$actionName = $presenter->getAction(true);
+```
+And get `$this->application` from dependency injection container:
+
+```php
+public function __construct(readonly \Nette\Application\Application $application)
+{
+}
+```
+
+If you're in a presenter then you can use `$this->getAction(true)` instead.
 
 ### Report-only policy
 Use `policiesReportOnly` configuration key to define policies to use with `Content-Security-Policy-Report-Only` header:
@@ -133,7 +150,7 @@ contentSecurityPolicy:
 Get the policy by calling `getHeaderReportOnly()` method:
 
 ```php
-$header = $this->contentSecurityPolicy->getHeaderReportOnly($this->presenterName, $this->actionName);
+$header = $this->contentSecurityPolicy->getHeaderReportOnly($presenter->getAction(true));
 if ($header) {
     $this->httpResponse->setHeader('Content-Security-Policy-Report-Only', $header);
 }
@@ -142,11 +159,11 @@ if ($header) {
 You can send both *enforce* and *report-only* policies which is useful for policy upgrades for example:
 
 ```php
-$header = $this->contentSecurityPolicy->getHeader($this->presenterName, $this->actionName);
+$header = $this->contentSecurityPolicy->getHeader($presenter->getAction(true));
 if ($header) {
     $this->httpResponse->setHeader('Content-Security-Policy', $header);
 }
-$header = $this->contentSecurityPolicy->getHeaderReportOnly($this->presenterName, $this->actionName);
+$header = $this->contentSecurityPolicy->getHeaderReportOnly($presenter->getAction(true));
 if ($header) {
     $this->httpResponse->setHeader('Content-Security-Policy-Report-Only', $header);
 }
