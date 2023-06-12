@@ -12,17 +12,17 @@ require __DIR__ . '/../vendor/autoload.php';
 Environment::setup();
 
 /** @testCase */
-class ConfigTest extends TestCase
+class CspConfigTest extends TestCase
 {
 
 	private const RANDOM = 'https://xkcd.com/221/';
 
-	private Config $config;
+	private CspConfig $config;
 
 
 	protected function setUp(): void
 	{
-		$this->config = new Config(new Nonce(self::RANDOM));
+		$this->config = new CspConfig(new Nonce(self::RANDOM));
 	}
 
 
@@ -196,4 +196,4 @@ class ConfigTest extends TestCase
 
 }
 
-(new ConfigTest())->run();
+(new CspConfigTest())->run();

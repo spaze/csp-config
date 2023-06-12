@@ -20,7 +20,7 @@ If you're using Nette Framework you can add the extension to your config file:
 
 ```neon
 extensions:
-    contentSecurityPolicy: Spaze\ContentSecurityPolicy\Bridges\Nette\ConfigExtension
+    contentSecurityPolicy: Spaze\ContentSecurityPolicy\Bridges\Nette\CspConfigExtension
 ```
 
 ### Example configuration
