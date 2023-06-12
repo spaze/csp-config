@@ -127,7 +127,7 @@ $actionName = $presenter->getAction(true);
 And get `$this->application` from dependency injection container:
 
 ```php
-public function __construct(readonly \Nette\Application\Application $application)
+public function __construct(private \Nette\Application\Application $application)
 {
 }
 ```
