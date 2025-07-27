@@ -12,6 +12,9 @@ jobs:
         php-version:
           - "8.3"
           - "8.4"
+        update-options:
+          - ""
+          - "--prefer-lowest"
 
     steps:
     - uses: actions/checkout@v4
@@ -34,7 +37,7 @@ jobs:
       run: composer validate --strict --no-interaction
 
     - name: Install dependencies
-      run: composer update --no-progress --no-interaction
+      run: composer update --no-progress --no-interaction ${{ matrix.update-options }}
 
     - name: Run tests
       run: composer test
