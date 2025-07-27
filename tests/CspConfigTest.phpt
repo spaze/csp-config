@@ -15,7 +15,7 @@ Environment::setup();
 class CspConfigTest extends TestCase
 {
 
-	private const RANDOM = 'https://xkcd.com/221/';
+	private const string RANDOM = 'https://xkcd.com/221/';
 
 	private CspConfig $config;
 

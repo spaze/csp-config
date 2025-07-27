@@ -12,13 +12,13 @@ use Spaze\NonceGenerator\Nonce;
 class CspConfig
 {
 
-	private const DEFAULT_KEY = '*';
+	private const string DEFAULT_KEY = '*';
 
-	private const KEY_SEPARATOR = '.';
+	private const string KEY_SEPARATOR = '.';
 
-	private const EXTENDS_KEY = '@extends';
+	private const string EXTENDS_KEY = '@extends';
 
-	private const OVERRIDE_FLAG = '!';
+	private const string OVERRIDE_FLAG = '!';
 
 	/** @phpstan-var PolicyArray */
 	private array $policy = [];
