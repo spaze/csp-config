@@ -7,7 +7,8 @@ use Nette\Schema\Helpers;
 use Spaze\NonceGenerator\Nonce;
 
 /**
- * @phpstan-type PolicyArray array<string, array<string, array<int, string>>>
+ * @phpstan-type Policy array<string, array<int, string>>
+ * @phpstan-type PolicyArray array<string, Policy>
  */
 class CspConfig
 {
@@ -130,14 +131,15 @@ class CspConfig
 
 
 	/**
-	 * @param array<string, array<int, string>> $currentPolicy
+	 * @phpstan-param Policy $currentPolicy
 	 * @param array<int, string> $parentKeys
 	 * @phpstan-param PolicyArray $policy
-	 * @return array<string, array<int, string>>
+	 * @phpstan-return Policy
 	 */
 	private function mergeExtends(array $currentPolicy, array $parentKeys, array $policy): array
 	{
 		$parentKey = current($parentKeys);
+		/** @phpstan-var Policy $currentPolicy */
 		$currentPolicy = (array)Helpers::merge($currentPolicy, $this->policy[$parentKey]);
 		if (isset($policy[$parentKey][self::EXTENDS_KEY])) {
 			$currentPolicy = $this->mergeExtends($currentPolicy, $policy[$parentKey][self::EXTENDS_KEY], $policy);
