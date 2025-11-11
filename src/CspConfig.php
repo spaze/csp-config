@@ -139,8 +139,10 @@ class CspConfig
 	private function mergeExtends(array $currentPolicy, array $parentKeys, array $policy): array
 	{
 		$parentKey = current($parentKeys);
-		/** @phpstan-var Policy $currentPolicy */
-		$currentPolicy = (array)Helpers::merge($currentPolicy, $this->policy[$parentKey]);
+		if (isset($this->policy[$parentKey])) {
+			/** @phpstan-var Policy $currentPolicy */
+			$currentPolicy = (array)Helpers::merge($currentPolicy, $this->policy[$parentKey]);
+		}
 		if (isset($policy[$parentKey][self::EXTENDS_KEY])) {
 			$currentPolicy = $this->mergeExtends($currentPolicy, $policy[$parentKey][self::EXTENDS_KEY], $policy);
 		}
