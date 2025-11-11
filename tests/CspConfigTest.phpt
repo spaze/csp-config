@@ -65,7 +65,7 @@ class CspConfigTest extends TestCase
 			],
 		]);
 		Assert::same("default-src 'none'; img-src https://foobar.example.com", $this->config->getHeader(':Foo:bar:'));
-		Assert::same('', $this->config->getHeaderReportOnly('Foo', 'bar'));
+		Assert::same('', $this->config->getHeaderReportOnly('Foo:bar'));
 	}
 
 
@@ -76,7 +76,7 @@ class CspConfigTest extends TestCase
 				'default-src' => ["'none'"],
 			],
 		]);
-		Assert::same('', $this->config->getHeader('Foo', 'bar'));
+		Assert::same('', $this->config->getHeader('Foo:bar'));
 		Assert::same("default-src 'none'", $this->config->getHeaderReportOnly(':Foo:bar'));
 	}
 
@@ -120,7 +120,7 @@ class CspConfigTest extends TestCase
 			],
 			'foo.bar' => [
 				'default-src' => ["'none'"],
-				'img-src' => 'https://foobar.example.com',
+				'img-src' => ['https://foobar.example.com'],
 			],
 		]);
 		Assert::same("default-src 'none'; img-src https://default.example.com", $this->config->getHeader(':Waldo:Foo:bar'));

@@ -100,7 +100,7 @@ class CspConfigExtensionTest extends TestCase
 	{
 		Assert::noError(function (): void {
 			Assert::same('child-src foo bar; style-src foo bar; script-src foo bar', $this->cspConfig->getHeader('Foo:bar'));
-			Assert::same('', $this->cspConfig->getHeaderReportOnly('Foo', 'bar'));
+			Assert::same('', $this->cspConfig->getHeaderReportOnly('Foo:bar'));
 		});
 	}
 
