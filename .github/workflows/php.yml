@@ -18,7 +18,7 @@ jobs:
           - "--prefer-lowest"
 
     steps:
-    - uses: actions/checkout@v6
+    - uses: actions/checkout@v7
 
     - name: OS info
       run: cat /etc/os-release
